@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>云API</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .search_bar {
+            height: 35px;
+            width: 100%;
+        }
+
+        .search_parent {
+            position: fixed;
+        }
+
+        .search_btn {
+            height: 35px;
+            width: 35px;
+            position: fixed;
+            background: url('../image/search_btn.jpg');
+            background-color: #f0f0f0;
+            background-position: center;
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-clip: border-box;
+            background-attachment: fixed;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .search_text {
+            width: 100%;
+            height: 35px;
+            padding-left: 35px;
+            position: fixed;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid rgba(200, 200, 200, 0.5);
+            z-index: 1;
+        }
+
+        .cancel_btn {
+            float: right;
+            height: 35px;
+            width: 35px;
+            position: fixed;
+            background: url('../image/search_btn.jpg');
+            background-color: #f0f0f0;
+            background-position: center;
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-clip: border-box;
+            background-attachment: fixed;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .room_info {
+            width: 100%;
+            height: 300px;
+            background-color: #fff;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+
+        .room_textinfo {
+            border-top: 1px solid #dddddd;
+            height: 45px;
+        }
+
+        .room_textinfo span {
+            line-height: 45px;
+            font-size: 16px;
+        }
+
+        .info_text {
+            display: block;
+        }
+
+        .canvCont {
+            width: auto;
+            height: 250px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="search_bar" id="flag">
+        <div class="search_parent" >
+            <input type="button" id='search_btn' class="search_btn">
+            <input type="text" class="search_text" placeholder="搜索" id='search_text' onchange="searchBy()">
+        </div>
+    </div>
+
+</body>
+
+
+<script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../script/highcharts.js"></script>
+<script type="text/javascript" src="../script/charts.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    var token = localStorage.getItem('token');
+    apiready = function() {
+        api.ajax({
+            url: 'http://47.98.53.200:5000/danmu/analyse/',
+            method: 'get',
+            headers: {
+                //'Content-Type': 'application/json;charset=utf-8',
+                'authorization': 'JWT ' + token,
+                // "enctype": "multipart/form-data",
+                // 'Connection': 'keep-alive'
+            },
+            // data: {
+            //     values: {
+            //         'short_name': '6040761'
+            //     }
+            // }
+        }, function(ret, err) {
+            initList(ret);
+            if (err) {
+                alert(JSON.stringify(err));
+            }
+        });
+    }
+
+    initList = function(ret) {
+        // alert(JSON.stringify(ret));
+        var addStr = '';
+        for (var i in ret.results) {
+            addStr += '<div class="room_info">' +
+                '<div class="canvCont" id="' + ret.results[i].id + '">' +
+                '</div>' +
+                '<div class="room_textinfo" onclick="openDetail(' + ret.results[i].id + ')">' +
+                '<span>房间号：' + ret.results[i].id + '</span>' +
+                '</div>' +
+                '</div>';
+            dynPic(ret.results[i].id);
+        }
+        $('div').remove(".room_info")
+        $("#flag").after(addStr);
+    }
+
+    searchBy = function() {
+        //修改按钮格式
+        $("#search_btn").attr({
+            "onclick": "cancelSearch()",
+            "class": "cancel_btn",
+            "type":"button",
+            "id":'search_btn'
+        });
+
+        //关闭旧请求进行新的http请求
+        api.cancelAjax({
+            tag: 'search'
+        });
+        var roomId = $api.byId('search_text').value;
+        api.ajax({
+            url: 'http://47.98.53.200:5000/search/rooms/',
+            method: 'post',
+            tag: 'search',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'authorization': 'JWT ' + token,
+                "enctype": "multipart/form-data",
+                // 'Connection': 'keep-alive'
+            },
+            data: {
+                body: {
+                    'roomId': roomId,
+                    'query': 'rooms'
+                }
+            }
+        }, function(ret, err) {
+            initList(ret);
+            if(err){
+              alert(JSON.stringify(err));
+            }
+        });
+
+    }
+
+    cancelSearch = function() {
+      $("#search_btn").attr({
+          "onclick": " ",
+          "class": "search_btn"
+      });
+
+      $api.byId('search_text').value = '';
+
+      apiready();
+    }
+
+    openDetail = function(Rid) {
+        localStorage.setItem('Rid', Rid);
+        api.openWin({
+            name: 'detailPage',
+            url: 'detailPage.html',
+            pageParam: {
+                name: 'test'
+            }
+        });
+    }
+
+    openRoomPage = function(Rid) {
+        localStorage.setItem('Rid', Rid);
+        api.openWin({
+            name: 'viewPage',
+            url: './viewPage.html',
+            pageParam: {
+                name: 'test'
+            }
+        });
+    }
+
+    dynPic = function(id) {
+        var chart = {
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in IE < IE 10.
+            marginRight: 10,
+            events: {
+                load: function() {
+                    // set up the updating of the chart each second
+                    var series = this.series[0];
+                    setInterval(function() {
+                        var x = (new Date()).getTime(), // current time
+                            y = Math.random();
+                        series.addPoint([x, y], true, true);
+                    }, 1000);
+                }
+            }
+        };
+        var title = {
+            text: ''
+        };
+        var xAxis = {
+            type: 'datetime',
+            tickPixelInterval: 150
+        };
+        var yAxis = {
+            title: {
+                text: '积极度'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        };
+        var tooltip = {
+            formatter: function() {
+                return '<b>' + this.series.name + '</b><br/>' +
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                    Highcharts.numberFormat(this.y, 2);
+            }
+        };
+        var plotOptions = {
+            area: {
+                pointStart: 1940,
+                marker: {
+                    enabled: false,
+                    symbol: 'circle',
+                    radius: 2,
+                    states: {
+                        hover: {
+                            enabled: true
+                        }
+                    }
+                }
+            }
+        };
+        var legend = {
+            enabled: false
+        };
+        var exporting = {
+            enabled: false
+        };
+        var credits = {
+            enabled: false //右下角的版权信息不显示
+        };
+        var series = [{
+            name: 'Random data',
+            data: (function() {
+                // generate an array of random data
+                var data = [],
+                    time = (new Date()).getTime(),
+                    i;
+                for (i = -19; i <= 0; i += 1) {
+                    data.push({
+                        x: time + i * 1000,
+                        y: Math.random()
+                    });
+                }
+                return data;
+            }())
+        }];
+
+        var json = {};
+        json.chart = chart;
+        json.tooltip = tooltip;
+        json.xAxis = xAxis;
+        json.yAxis = yAxis;
+        json.legend = legend;
+        json.exporting = exporting;
+        json.series = series;
+        json.plotOptions = plotOptions;
+        json.credits = credits;
+        json.title = title;
+
+
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
+        $('#' + id).highcharts(json);
+
+    }
+</script>
+
+</html>

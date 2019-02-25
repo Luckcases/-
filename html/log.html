@@ -1,0 +1,254 @@
+<!doctype html>
+  <html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>初始登录界面</title>
+    <link rel="stylesheet" type="text/css" href="css/api.css" />
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            background: #000;
+        }
+
+        .hdivider {
+            width: 100%;
+            height: 0px;
+            background-color: #e0e0e0;
+        }
+
+        .swiper-container img {
+            width: 100%;
+        }
+        /* 头部 */
+
+        .topbar {
+            background: rgb(41, 41, 41);
+            height: 50px;
+            border-bottom: 1px solid #DDDFE3;
+            position: relative;
+        }
+
+        .egret-header-box {
+            height: 50px;
+        }
+        /* 第二头部 */
+
+        .egret-header-text {
+            line-height: 50px;
+            color: #fff;
+            font-size: 16px;
+            padding: 0 10px;
+        }
+
+        .egret-header-title {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        input {
+            height: 50px;
+            width: 80%;
+            font-size: 18px;
+            color: #8E8C8C;
+        }
+
+        input::-webkit-input-placeholder {
+            color: #ccc;
+        }
+
+        .divider {
+            height: 100px;
+        }
+
+        .divider img {
+            height: 100px;
+            width: 100%;
+        }
+
+        .email,
+        .passwd {
+            background: #fff;
+        }
+
+        .username img,
+        .passwd img,
+        .email img {
+            vertical-align: top;
+        }
+
+        .item {
+            background-color: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            position: relative;
+        }
+
+        .btn {
+            margin: 3px 10px;
+            background: rgb(41, 41, 41);
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            color: #fff;
+        }
+
+        .username img {
+            width: 25px;
+            margin-top: 15px;
+            margin-left: 10px;
+            margin-right: 9px;
+        }
+
+        .email img {
+            width: 25px;
+            margin-top: 15px;
+            margin-left: 10px;
+            margin-right: 9px;
+        }
+
+        .passwd img {
+            height: 25px;
+            margin-top: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        #qqpic {
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+
+        input {
+            outline: none;
+        }
+
+
+
+
+    </style>
+    <div class="titlebar">
+        <div class="egret-header topbar">
+            <div class="egret-header-title" onclick="turnYourFace()">鹰眼</div>
+        </div>
+    </div>
+</head>
+
+<body>
+    <div class="icon"><img src = '../image/deagle-2.png'></div>
+
+    <section>
+        <div class="item email">
+            <img src="../image/login01.png">
+            <input type="text" placeholder="用户名" id="email">
+        </div>
+        <div class="item passwd">
+            <img src="../image/login02.png">
+            <input type="password" placeholder="密码" id="passwd">
+        </div>
+        <div class="btn" tapmode onclick="javascript:fnLogin()">登 录</div>
+    </section>
+
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript">
+        apiready = function() {
+          const token = null;
+
+          var dat = {"username":'admin',"password":'123456'};
+
+          api.ajax({
+              url: 'http://47.98.53.200:5000/user/login/',
+              method: 'post',
+              headers: {
+                  'Content-Type': 'application/json;charset=utf-8',
+                  'authorization':'JWT ' + token,
+                  "enctype":"multipart/form-data"
+              },
+              data: {
+                body: JSON.stringify(dat)
+              }
+          }, function(ret, err) {
+              if (err){
+                alert(JSON.stringify(err));
+              }
+              if (ret) {
+                  localStorage.setItem('token',ret.token);
+                  api.closeWin({
+                      name: 'log'
+                  });
+              } else {
+                api.toast({
+                    msg: '用户名或密码错误',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+                return;
+              }
+          });
+
+        };
+
+        fnLogin = function() {
+            api.closeWin({
+                name: 'log'
+            });
+            var pasw = $api.byId('passwd').value;
+            var emal = $api.byId('email').value;
+            var dat = {"username":emal,"password":pasw};
+            const token = null;
+            if (!emal.length) {
+                api.toast({
+                    msg: '用户名不能为空',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            } else if (!pasw.length) {
+                api.toast({
+                    msg: '密码不能为空',
+                    duration: 2000,
+                    location: 'bottom'
+                });
+            } else {
+                api.ajax({
+                    url: 'http://47.98.53.200:8000/login/',
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json;charset=utf-8',
+                        'authorization':'JWT ' + token,
+                        "enctype":"multipart/form-data"
+                    },
+                    data: {
+                      body: JSON.stringify(dat)
+                    }
+                }, function(ret, err) {
+                    if (err){
+                    alert(err.msg);
+                    }
+                    if (ret) {
+                        localStorage.setItem('token',ret.token);
+                    } else {
+                      api.toast({
+                          msg: '用户名或密码错误',
+                          duration: 2000,
+                          location: 'bottom'
+                      });
+                      return;
+                    }
+                });
+
+            }
+
+        }
+
+    </script>
+</body>
+
+</html>

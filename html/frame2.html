@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>历史危险</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+
+        .search_bar {
+            height: 35px;
+            width: 100%;
+        }
+
+        .search_parent {
+            position: fixed;
+        }
+
+        .search_btn {
+            height: 35px;
+            width: 35px;
+            position: fixed;
+            background: url('../image/search_btn.jpg');
+            background-color: #f0f0f0;
+            background-position: center;
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-clip: border-box;
+            background-attachment: fixed;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .search_text {
+            width: 100%;
+            height: 35px;
+            padding-left: 35px;
+            position: fixed;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid rgba(200, 200, 200, 0.5);
+            z-index: 1;
+        }
+
+        .space {
+            height: 10px;
+        }
+
+        .room_info {
+            height: 60px;
+            background-color: #fff;
+            border-bottom: 1px #f0f0f0 solid;
+        }
+
+        .innerLeft {
+            width: 60px;
+            display: inline-block;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            float: left;
+        }
+
+        .innerLeft img {
+            height: 60px;
+            width: 60px;
+        }
+
+        .innerMid {
+            position: relative;
+            height: 60px;
+            width: 200px;
+            display: inline-block;
+            float: left;
+        }
+
+        .innerMid .firstSpan {
+            line-height: 35px;
+            font-size: 15px;
+        }
+
+        .innerMid .secondSpan {
+            line-height: 25px;
+            font-size: 12px;
+            color: rgb(150, 150, 150);
+        }
+
+        .right-btn{
+          float: left;
+          display: inline-block;
+          height: 60px;
+          width: 60px;
+        }
+
+        .right-btn img{
+          height: 20px;
+          width: 20px;
+          margin-top: 40px;
+        }
+
+        .room_moreinfo{
+          background: #fff;
+        }
+
+        .room_moreinfo_text{
+          line-height: 25px;
+          padding-left: 15px;
+          border-bottom: 1px #f0f0f0 dashed;
+        }
+
+        .moreinfo_level{
+          line-height: 35px;
+          font-size: 16px;
+          padding-left: 5px;
+        }
+
+        .moreinfo_level span{
+          color: #f00;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="search_bar">
+        <form action="" class="search_parent ">
+            <input type="button" name="" id="" class="search_btn">
+            <input type="text" id ='sText' class="search_text" placeholder="搜索" onchange="search()">
+        </form>
+    </div>
+    <div class="space"></div>
+    <div class="room_info">
+        <div class="innerLeft">
+            <img src="../image/douyu.jpg">
+        </div>
+        <div class="innerMid" onclick="openHistory()">
+            <span class="firstSpan">房间号：9532614</span>
+            <span class="secondSpan">当日预警次数：22</span>
+        </div>
+        <div class="right-btn" onclick="showMore()">
+            <img src = '../image/douyu.jpg'>
+        </div>
+    </div>
+    <div class="room_moreinfo">
+        <div><p class="moreinfo_level">建议处理优先级：<span>极高</span></p></div>
+        <p class='room_moreinfo_text'>近一周预警次数：22</p>
+        <p class='room_moreinfo_text'>近十天预警次数：32</p>
+        <p class='room_moreinfo_text'>监控以来总次数：50</p>
+    </div>
+</body>
+
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+
+    }
+
+    search = function(){
+
+    }
+
+    showMore = function(){
+      $('div.room_moreinfo').slideToggle(500);
+    }
+
+    openHistory = function() {
+        api.openWin({
+            name: 'detailHistory',
+            url: 'detailHistory.html',
+            pageParam: {
+                name: 'test'
+            }
+        });
+    }
+</script>
+
+</html>

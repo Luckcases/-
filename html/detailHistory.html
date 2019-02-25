@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+    <title>title</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <style>
+        body {
+            background-color: #6c6c6c;
+            min-height: 100%;
+        }
+
+        .titlebar {
+            background-color: inherit;
+            ;
+            height: 50px;
+            position: relative;
+        }
+
+        .egret-img {
+            position: absolute;
+        }
+
+        .egret-img img {
+            height: 30px;
+            padding: 10px;
+            vertical-align: top;
+        }
+
+        .egret-header-text {
+            line-height: 50px;
+            color: #fff;
+            font-size: 16px;
+            padding: 0 10px;
+        }
+
+        .egret-header-title {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .re-item {
+            width: 220px;
+            margin: 50px auto;
+            height: 276px;
+            cursor: pointer;
+            position: relative;
+            perspective: 500;
+            -webkit-perspective: 500;
+        }
+
+        .leftPanel {
+            padding-top: 35px;
+            height: 100%;
+            width: 100%;
+            background-color: rgb(250, 250, 250);
+            position: fixed;
+            z-index: 99;
+        }
+
+        .leftPanel .pinleft {
+            display: inline-block;
+            float: left;
+            height: 100%;
+            width: 25%;
+            border-right: 1px rgba(200, 200, 200, 0.5) solid;
+        }
+
+        .leftPanel .pinright {
+            display: inline-block;
+            float: left;
+            height: 100%;
+            width: 74%;
+        }
+
+        .leftPanel .pinright-hidden {
+            display: none;
+        }
+
+        .pinright .Datebut {
+            width: 90px;
+            height: 25px;
+            border: 1px rgb(180, 180, 180) solid;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 10px;
+            margin-left: 5px;
+        }
+
+        .Datebut span {
+            line-height: 25px;
+        }
+
+        .Datebut-choosen {
+            background-color: rgb(180, 180, 180);
+        }
+
+        .pinleft-but {
+            width: 100%;
+            height: 45px;
+            text-align: center;
+            border-bottom: 1px rgba(200, 200, 200, 0.5) solid;
+        }
+
+        .pinleft-but-chosen {
+            border-right: 1px rgb(250, 250, 250) solid;
+        }
+
+        .pinleft-but p {
+            line-height: 45px;
+            font-size: 15px;
+        }
+
+        .picCont {
+            background-color: rgb(150, 150, 150);
+        }
+
+        .search_bar {
+            height: 35px;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .search_parent {
+            position: fixed;
+            z-index: 100;
+        }
+
+        .search_btn {
+            height: 35px;
+            width: 35px;
+            position: fixed;
+            background: url('../image/menu.png');
+            background-color: #fff;
+            background-position: center;
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-clip: border-box;
+            background-attachment: fixed;
+            border-left: 1px solid #f0f0f0;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .search_text {
+            width: 100%;
+            height: 35px;
+            padding-left: 35px;
+            position: fixed;
+            background-color: #fff;
+            z-index: 100;
+        }
+
+        .cavCont {
+            width: 100%;
+            height: 400px;
+            cursor: pointer;
+            position: relative;
+            perspective: 500;
+            -webkit-perspective: 500;
+        }
+
+        .cavCont-front,
+        .cavCont-back {
+            background-color: rgb(150, 150, 150);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            -webkit-perspective: 1000;
+            backface-visibility: hidden;
+            -webkit-transition: all 1.5s;
+            -moz-transition: all 1.5s;
+            -ms-transition: all 1.5s;
+            -o-transition: all 1.5s;
+            box-shadow: rgba(50, 50, 50, 0.2) 0 0 15px;
+            overflow: hidden;
+        }
+
+        .cavCont-back {
+            position: relative;
+            transform: rotateY(-180deg);
+            -webkit-transform: rotateY(-180deg);
+        }
+        /*.cavCont:hover .cavCont-front {
+            transform: rotateY(-180deg);
+            -webkit-transform: rotateY(-180deg);
+        }
+
+        .cavCont:hover .cavCont-back {
+            transform: rotateY(-360deg);
+            -webkit-transform: rotateY(-360deg);
+        }*/
+
+        .textDe {
+            height: 35px;
+            border-top: 1px dashed #d0d0d0;
+        }
+
+        .textDe span {
+            color: #fff;
+            line-height: 35px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="titlebar">
+        <div class="egret-header topbar">
+            <div class="egret-header-title" onclick="turnYourFace()">房间详情</div>
+            <div class="egret-img"><img src="../image/cm2_icn_back.png" alt="" onclick="goback()"></div>
+            <!-- <div  class="egret-img toRight"><img src="../../image/cm2_poplay_icn_reply.png" alt="" onclick="emptycache()" ></div> -->
+        </div>
+    </div>
+    <div class='leftPanel' id='fuk'>
+        <div class="pinleft">
+            <div class="pinleft-but" id='but0' onclick="changeType(0)">
+                <p>筛选时间段</p>
+            </div>
+            <div class="pinleft-but" id='but1' onclick="changeType(1)">
+                <p>筛选时间点</p>
+            </div>
+        </div>
+        <div class="pinright" id='panelR0'>
+            <div class='Datebut' onclick="chooseTime(0)" id='Dbut0'><span>近一周</span></div>
+            <div class='Datebut' onclick="chooseTime(1)" id='Dbut1'><span>近十日</span></div>
+            <div class='Datebut' onclick="chooseTime(2)" id='Dbut2'><span>近一月</span></div>
+        </div>
+        <div class="pinright" id='panelR1'>
+            5456465
+        </div>
+    </div>
+    <div class="picCont">
+        <div class="search_bar">
+            <form action="" class="search_parent ">
+                <input type="button" name="" id="" class="search_btn" onclick='openleftPanel()'>
+                <input type="text" class="search_text" placeholder="时间筛选">
+            </form>
+        </div>
+        <div class="cavCont">
+            <div class="cavCont-front" id='0'></div>
+            <div class="cavCont-back" id='1'></div>
+        </div>
+        <div class="textDe">
+            <span>消极比例：12%</span>
+        </div>
+        <div class="textDe">
+            <span>近期预警次数：10</span>
+        </div>
+        <div class="textDe">
+            <span>近期处理措施：警告</span>
+        </div>
+    </div>
+    <div class="pieCont">
+        <div class="">
+        </div>
+
+</body>
+<script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="../script/highcharts.js"></script>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript">
+    var ifFront = 0;
+    apiready = function() {
+        createPie();
+        createChart();
+        //$("#fuk").hide(500);
+        changeType(0);
+        var Rid = localStorage.getItem('Rid');
+        localStorage.removeItem('Rid');
+        getRoomHistory(Rid);
+    };
+
+    getRoomHistory = function(Rid){
+      var token = localStorage.getItem("token");
+      api.ajax({
+          url: 'http://47.98.53.200:5000/danmu/history/',
+          method: 'post',
+          headers: {
+              //'Content-Type': 'application/json;charset=utf-8',
+              'authorization': 'JWT ' + token,
+              // "enctype": "multipart/form-data",
+              // 'Connection': 'keep-alive'
+          },
+          data: {
+              values: {
+                  'roomId': '6040761',
+                  'sortBy':'ascend_time'
+              }
+          }
+      }, function(ret, err) {
+          alert(JSON.stringify(ret));
+          //alert(JSON.stringify(err));
+      });
+
+    }
+
+    openleftPanel = function() {
+        $("#fuk").toggle(500);
+    }
+
+    changeType = function(i) {
+        j = (i + 1) % 2
+        $("#but" + i).addClass("pinleft-but-chosen");
+        $("#but" + j).removeClass("pinleft-but-chosen");
+        $("#panelR" + j).addClass("pinright-hidden");
+        $("#panelR" + i).removeClass("pinright-hidden");
+    }
+
+    chooseTime = function(i) {
+        j = (i + 1) % 3;
+        k = (i + 2) % 3;
+        $("#Dbut" + i).addClass("Datebut-choosen");
+        $("#Dbut" + k).removeClass("Datebut-choosen");
+        $("#Dbut" + j).removeClass("Datebut-choosen");
+    }
+
+    createPie = function() {
+        var chart;
+        $(function() {
+            $('#0').highcharts({
+                chart: {
+                    borderColor: '#E5E8EB', //图表框颜色
+                    borderWidth: 1, //图表框宽度
+                    backgroundColor: 'rgb(255, 255, 255)', //图表背景色
+                    plotBackgroundColor: '', //绘图区无颜色
+                    plotBorderWidth: 0, //绘图区边框宽度
+                    plotShadow: false, //绘图区阴影效果
+                    spacing: [100, 20, 30, 20] //图表内边距，上右下左
+                },
+                colors: [
+                    '#EFE07C', '#89B5EB', '#F8AA9E', '#FFC7B8', '#F18686', '#EFC27C'
+                ], // colors是饼图或者环形图中每一块的颜色
+                credits: {
+                    enabled: false //右下角的版权信息不显示
+                },
+                title: {
+                    floating: true,
+                    text: '弹幕情况', //环形图中心显示文字加图片
+                    useHTML: true, //必须设置true才能加图片
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+                }, //浮动的数据提示框
+                plotOptions: {
+                    pie: {
+                        size: 200, //环形图大小控制
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.2f} %'
+                        }
+                    }
+                },
+                series: [{
+                    type: 'pie',
+                    innerSize: '70%', // 圆环厚度百分比
+                    name: '占比', //浮动框的文字提示
+                    showInLegend: true, //显示图例
+                    data: [
+                        ['1', 45.0],
+                        ['2', 26.8],
+                        ['3', 6.2],
+                        ['4', 16.2],
+                        ['5', 36.2],
+                    ]
+                }],
+                legend: {
+                    layout: 'horizontal', //图例水平排放，超过宽度后换行
+                    labelFormat: '{name} {percentage:.2f} %',
+                    symbolHeight: 8, //图例小标志高度
+                    symbolWidth: 8,
+                    width: 100, //图例区宽度
+                    align: 'center',
+                    symbolRadius: 0 // 图例形状为方形
+                },
+            }, function(c) {
+                // 环形图圆心
+                var centerY = c.series[0].center[1],
+                    titleHeight = parseInt(c.title.styles.fontSize);
+                c.setTitle({
+                    y: centerY + titleHeight / 2
+                });
+                chart = c;
+            });
+        });
+    }
+
+    createChart = function() {
+        var title = {
+            text: ''
+        };
+        var subtitle = {
+            text: '房间：1564854'
+        };
+        var xAxis = {
+            categories: ['1', '2', '3', '4', '5', '6',
+                '7', '8', '9', '10', '11', '12'
+            ]
+        };
+        var yAxis = {
+            title: {
+                text: '积极度 '
+            }
+        };
+        var plotOptions = {
+            line: {
+                dataLabels: {
+                    enabled: true
+                },
+                enableMouseTracking: false
+            }
+        };
+        var series = [{
+            name: '实际',
+            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, {
+                y: 25.2,
+                color: "#BF0000"
+            }, {
+                y: 26.6,
+                color: "#BF0000"
+            }, 23.3, 18.3, 13.9, 9.6]
+        }, {
+            name: '预测',
+            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+        }];
+
+        var credits = {
+            enabled: false //右下角的版权信息不显示
+        };
+
+        var json = {};
+
+        json.title = title;
+        json.subtitle = subtitle;
+        json.xAxis = xAxis;
+        json.yAxis = yAxis;
+        json.series = series;
+        json.plotOptions = plotOptions;
+        json.credits = credits;
+        $('#1').highcharts(json);
+    }
+
+    wehaveCloud = function() {
+        var text =
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean bibendum erat ac justo sollicitudin, quis lacinia ligula fringilla. Pellentesque hendrerit, nisi vitae posuere condimentum, lectus urna accumsan libero, rutrum commodo mi lacus pretium erat. Phasellus pretium ultrices mi sed semper. Praesent ut tristique magna. Donec nisl tellus, sagittis ut tempus sit amet, consectetur eget erat. Sed ornare gravida lacinia. Curabitur iaculis metus purus, eget pretium est laoreet ut. Quisque tristique augue ac eros malesuada, vitae facilisis mauris sollicitudin. Mauris ac molestie nulla, vitae facilisis quam. Curabitur placerat ornare sem, in mattis purus posuere eget. Praesent non condimentum odio. Nunc aliquet, odio nec auctor congue, sapien justo dictum massa, nec fermentum massa sapien non tellus. Praesent luctus eros et nunc pretium hendrerit. In consequat et eros nec interdum. Ut neque dui, maximus id elit ac, consequat pretium tellus. Nullam vel accumsan lorem.';
+        var lines = text.split(/[,\. ]+/g),
+            data = Highcharts.reduce(lines, function(arr, word) {
+                var obj = Highcharts.find(arr, function(obj) {
+                    return obj.name === word;
+                });
+                if (obj) {
+                    obj.weight += 1;
+                } else {
+                    obj = {
+                        name: word,
+                        weight: 1
+                    };
+                    arr.push(obj);
+                }
+                return arr;
+            }, []);
+
+        Highcharts.chart('container', {
+            series: [{
+                type: 'wordcloud',
+                data: data,
+                name: 'Occurrences'
+            }],
+            title: {
+                text: 'Wordcloud of Lorem Ipsum'
+            }
+        });
+    }
+
+    turnYourFace = function() {
+        if (ifFront == 0) {
+            $("#0").css({
+                "transform": "rotateY(-180deg)",
+                "-webkit-transform": "rotateY(-180deg)"
+            });
+            $("#1").css({
+                "transform": "rotateY(-360deg)",
+                "-webkit-transform": "rotateY(-360deg)"
+            });
+            ifFront = (ifFront + 1) % 2;
+            return;
+        } else {
+            $("#0").css({
+                "transform": "rotateY(0deg)",
+                "-webkit-transform": "rotateY(0deg)"
+            });
+            $("#1").css({
+                "transform": "rotateY(-180deg)",
+                "-webkit-transform": "rotateY(-180deg)"
+            });
+            ifFront = (ifFront + 1) % 2;
+            return;
+        }
+    }
+
+    goback = function() {
+        api.closeWin({
+            name: 'detailHistory'
+        });
+    }
+</script>
+
+</html>
