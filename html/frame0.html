@@ -12,7 +12,7 @@
         body {
             background-color: #f0f0f0;
         }
-
+        /*搜索模块*/
         .search_bar {
             height: 35px;
             width: 100%;
@@ -34,7 +34,23 @@
             background-clip: border-box;
             background-attachment: fixed;
             cursor: pointer;
-            z-index: 2;
+            z-index: 102;
+        }
+
+        .cancel_btn {
+            float: right;
+            height: 35px;
+            width: 35px;
+            position: fixed;
+            background: url('../image/cancel.jpg');
+            background-color: #f0f0f0;
+            background-position: center;
+            background-size: 35px 35px;
+            background-repeat: no-repeat;
+            background-clip: border-box;
+            background-attachment: fixed;
+            cursor: pointer;
+            z-index: 102;
         }
 
         .search_text {
@@ -43,62 +59,111 @@
             padding-left: 35px;
             position: fixed;
             background-color: #f0f0f0;
-            border-bottom: 1px solid rgba(200, 200, 200, 0.5);
-            z-index: 1;
+            border-bottom: 1px solid rgba(220, 220, 220, 0.3);
+            z-index: 101;
         }
-
-        .cancel_btn {
-            float: right;
+        /*排序模块，位于搜索模块右侧*/
+        .sort_type {
+            width: 45px;
             height: 35px;
-            width: 35px;
             position: fixed;
-            background: url('../image/search_btn.jpg');
-            background-color: #f0f0f0;
-            background-position: center;
-            background-size: 20px 20px;
-            background-repeat: no-repeat;
-            background-clip: border-box;
-            background-attachment: fixed;
-            cursor: pointer;
-            z-index: 2;
+            color: rgb(150, 150, 150);
+            text-align: center;
+            border-left: 1px solid rgba(220, 220, 220, 0.3);
+            z-index: 102;
         }
-
+        /*房间信息标签*/
         .room_info {
             width: 100%;
             height: 300px;
-            background-color: #fff;
             border-radius: 15px;
             margin-top: 15px;
+            background: #fff;
+            z-index: 1;
         }
-
+        /*房间信息标签下部信息条*/
         .room_textinfo {
-            border-top: 1px solid #dddddd;
             height: 45px;
+            width: 100%;
+            float: left;
+            position: absolute;
+            border-top: 1px solid #dddddd;
         }
 
         .room_textinfo span {
+            position: absolute;
+            width: 100px;
             line-height: 45px;
             font-size: 16px;
+        }
+
+        .room_textinfo img {
+          position: absolute;
+          width: 45px;
+          height: 45px;
         }
 
         .info_text {
             display: block;
         }
-
+        /*折线图容器*/
         .canvCont {
             width: auto;
             height: 250px;
+        }
+        /*排序选择按钮容器*/
+        .SortArea {
+          display: none;
+          width: 100px;
+          height: 75px;
+          position: fixed;
+          background-color: #f0f0f0;
+          z-index: 102;
+          border-bottom: 1px solid #dddddd;
+        }
+
+        .SortArea .pp{
+          width: 100%;
+          height: 37px;
+          line-height: 37px;
+          border-top: 1px solid #dddddd;
+          text-align: center;
+        }
+
+        .chosen{
+          background-color: #dddddd;
         }
     </style>
 </head>
 
 <body>
-
+<!-- 上部搜索条和排序 -->
     <div class="search_bar" id="flag">
-        <div class="search_parent" >
+        <div class="search_parent">
             <input type="button" id='search_btn' class="search_btn">
             <input type="text" class="search_text" placeholder="搜索" id='search_text' onchange="searchBy()">
+            <input type="text" class="sort_type" id="sort_type" readonly="readonly" onclick="sortBy()">
         </div>
+    </div>
+<!-- 隐藏的排序按钮 -->
+    <div class="SortArea" id ="SortArea">
+      <p onclick="changeSortType(0)" class="pp" id = 'Sort0'>按时间排序</p>
+      <div class="divider"></div>
+      <p onclick="changeSortType(1)" class="pp" id = 'Sort1'>按风险排序</p>
+    </div>
+<!-- 房间信息展示列表项 -->
+    <div class="room_info">
+        <div class="canvCont" id="">
+        </div>
+        <div class="room_textinfo" onclick="openDetail()">
+          <span>房间号</span><img src = '../image/cancel.jpg' id='gotoImg'>
+        </div>
+    </div>
+
+    <div class="room_info">
+        <div class="canvCont" id="">
+        </div>
+        <div class="room_textinfo" onclick="openDetail()"><span>房间号</span></div>
     </div>
 
 </body>
@@ -111,7 +176,13 @@
 <script type="text/javascript">
     var token = localStorage.getItem('token');
     apiready = function() {
-        api.ajax({
+        initSort();
+        var toleft = document.documentElement.clientWidth - 46;
+        $('#gotoImg').css({
+            "margin-left": toleft,
+            "margin-top": '1px'
+        });
+        api.ajax({ //请求信息
             url: 'http://47.98.53.200:5000/danmu/analyse/',
             method: 'get',
             headers: {
@@ -127,13 +198,36 @@
             // }
         }, function(ret, err) {
             initList(ret);
+            //alert(JSON.stringify(ret));
             if (err) {
                 alert(JSON.stringify(err));
             }
         });
     }
 
-    initList = function(ret) {
+    initSort = function() {  //在页面加载时初始化与排序有关的组件
+        var toleft = document.documentElement.clientWidth - 45 - 1;
+        $('#sort_type').css({
+            "margin-left": toleft
+        });
+        $api.byId('sort_type').value = '排序';
+        toleft = document.documentElement.clientWidth - 100;
+        $('#SortArea').css({
+            "margin-left": toleft
+        });
+    }
+
+    changeSortType = function(i){ //排序选项点击事件
+      j = (i + 1) % 2
+      $("#Sort" + i).addClass("chosen");
+      $("#Sort" + j).removeClass("chosen");
+    }
+
+    sortBy = function(i){ //打开排序选项框
+      $("#SortArea").slideToggle(500);
+    }
+
+    initList = function(ret) {  //根据服务器返回数据建立列表
         // alert(JSON.stringify(ret));
         var addStr = '';
         for (var i in ret.results) {
@@ -144,19 +238,25 @@
                 '<span>房间号：' + ret.results[i].id + '</span>' +
                 '</div>' +
                 '</div>';
-            dynPic(ret.results[i].id);
         }
         $('div').remove(".room_info")
         $("#flag").after(addStr);
+        var toleft = document.documentElement.clientWidth - 45 - 1;
+        $('#gotoImg').css({
+            "margin-left": toleft
+        });
+        for (var i in ret.results) {
+            dynPic(ret.results[i].id);
+        }
     }
 
-    searchBy = function() {
+    searchBy = function() {  //搜索响应事件
         //修改按钮格式
         $("#search_btn").attr({
             "onclick": "cancelSearch()",
             "class": "cancel_btn",
-            "type":"button",
-            "id":'search_btn'
+            "type": "button",
+            "id": 'search_btn'
         });
 
         //关闭旧请求进行新的http请求
@@ -182,22 +282,22 @@
             }
         }, function(ret, err) {
             initList(ret);
-            if(err){
-              alert(JSON.stringify(err));
+            if (err) {
+                alert(JSON.stringify(err));
             }
         });
 
     }
 
-    cancelSearch = function() {
-      $("#search_btn").attr({
-          "onclick": " ",
-          "class": "search_btn"
-      });
+    cancelSearch = function() {  //取消搜索
+        $("#search_btn").attr({
+            "onclick": " ",
+            "class": "search_btn"
+        });
 
-      $api.byId('search_text').value = '';
+        $api.byId('search_text').value = '';
 
-      apiready();
+        apiready();
     }
 
     openDetail = function(Rid) {
@@ -222,7 +322,7 @@
         });
     }
 
-    dynPic = function(id) {
+    dynPic = function(id) {  //生成动态折线图
         var chart = {
             type: 'spline',
             animation: Highcharts.svg, // don't animate in IE < IE 10.

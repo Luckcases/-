@@ -146,14 +146,22 @@
             <!-- <div  class="egret-img toRight"><img src="../../image/cm2_poplay_icn_reply.png" alt="" onclick="emptycache()" ></div> -->
         </div>
     </div>
-    <div class="picCont">
 
+    <!-- <div class="search_bar" id="flag">
+        <div class="search_parent">
+            <input type="button" id='search_btn' class="search_btn">
+            <input type="text" class="search_text" placeholder="筛选" id='search_text' onchange="searchBy()">
+        </div>
+    </div> -->
+
+
+    <div class="picCont">
         <div class="cavCont">
             <div class="cavCont-front" id='0'></div>
             <div class="cavCont-back" id='1'></div>
         </div>
         <div class="opRoom">
-            <div class="baseInfo"><span id = 'roomIdcon'></span><img src='../image/turnover.jpg' onclick="turnYourFace()"></div>
+            <div class="baseInfo"><span id='roomIdcon'></span><img src='../image/turnover.jpg' onclick="turnYourFace()"></div>
             <div class="cloud" id='cloud'>
             </div>
         </div>
@@ -180,54 +188,38 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
     var ifFront = 0;
+    var token = localStorage.getItem('token');
+    var Rid = localStorage.getItem('Rid');
     apiready = function() {
-        var token = localStorage.getItem('token');
-        var Rid = localStorage.getItem('Rid');
-
-        // api.ajax({
-        //     url: 'http://47.98.53.200:5000/danmu/analyse/',
-        //     method: 'post',
-        //     headers: {
-        //         'Content-Type': 'application/json;charset=utf-8',
-        //         'authorization': 'JWT ' + token,
-        //         "enctype": "multipart/form-data",
-        //         'Connection': 'keep-alive'
-        //     },
-        //     dataType:'text',
-        //     returnAll: 'true',
-        //     data: {
-        //         // body:"'roomId' : 'Rid'"
-        //             body: {
-        //                 'roomId': Rid
-        //             },
-        //     }
-        // }, function(ret, err) {
-        //     alert(ret);
-        //     if (err) {
-        //         alert(JSON.stringify(err));
-        //     }
-        // });
-        requstforLong(Rid,token);
-
+        init();
     };
 
-    requstforLong = function(Rid,token){
-      var xmlhttp=new XMLHttpRequest();
-      xmlhttp.open("GET","http://47.98.53.200:5000/danmu/analyse/",true);
-      xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=utf-8','authorization', 'JWT ' + token,'enctype', 'multipart/form-data');
-      var json = {};
-      json.roomId = Rid;
-      xmlhttp.send(JSON.stringify(json));
-      while (xmlhttp.readyState == 3) {
-        alert(xmlhttp.responseText);
-      }
+    requstforLong = function(chart) {
+        var result = [];
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "http://47.98.53.200:5000/danmu/analyse/", true);
+        xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=utf-8', 'authorization', 'JWT ' + token, 'enctype', 'multipart/form-data');//设置头部
+        var json = {};
+        json.roomId = Rid;
+        xmlhttp.onreadystatechange = function(e) {//接受请求的函数，服务器每返回一次数据都会响应
+            if (xmlhttp.readyState == 2) {
+                console.log('已收到服务器响应的标头');
+            } else if (xmlhttp.readyState == 3) {
+                result = xmlhttp.responseText.split(',');//将服务器返回的字符串变为数组
+                setInterval(chart.addPoint([(new Date()).getTime(), parseInt(result[result.length - 2])], true, true),1000);
+                console.log(result);
+            } else if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                console.log('服务器响应完毕!!');
+                console.log(xmlhttp.responseText);
+            }
+        };
+        xmlhttp.send(JSON.stringify(json));//发送请求
     }
 
-    init = function(ret){
-      alert(ret);
-      createPie();
-      createChart();
-      wehaveCloud();
+    init = function() {
+        createPie();
+        createChart();
+        wehaveCloud();
     }
 
     createPie = function() {
@@ -303,28 +295,17 @@
     }
 
     createChart = function() {
-        var chart = {
-            type: 'spline',
-            //animation: Highcharts.svg, // don't animate in IE < IE 10.
-            marginRight: 10,
-            events: {
-                load: function() {
-                    // set up the updating of the chart each second
-                    var series1 = this.series[0];
-                    // var series2 = this.series[1];
-                    setInterval(function() {
-                        var x = (new Date()).getTime(); // current time
-                        var y1 = Math.random();
-                        series1.addPoint([x, y1], true, true);
-                    }, 1000);
-                    // setInterval(function() {
-                    //     var x = (new Date()).getTime();
-                    //     var y2 = Math.random();
-                    //     series2.addPoint([x, y2], true, true);
-                    // }, 1000);
-                }
-            }
-        }
+      var chart = {
+          type: 'spline',
+          animation: Highcharts.svg, // don't animate in IE < IE 10.
+          marginRight: 10,
+          events: {
+              load: function() {
+                  var series = this.series[0];
+                  setInterval(requstforLong(series), 1000);
+              }
+          }
+      };
 
         var title = {
             text: ''
@@ -334,7 +315,7 @@
         };
         var xAxis = {
             type: 'datetime',
-            tickPixelInterval: 150
+            tickPixelInterval: 10
         };
         var yAxis = {
             title: {
@@ -342,7 +323,7 @@
             },
             plotBands: [{ // Light air
                 from: 0,
-                to: 0.5,
+                to: 1,
                 color: 'rgba(0, 255, 127, 0.1)',
                 label: {
                     text: '积极',
@@ -351,8 +332,8 @@
                     }
                 }
             }, { // Light breeze
-                from: 0.5,
-                to: 1,
+                from: -1,
+                to: 0,
                 color: 'rgba(220, 20, 60, 0.1)',
                 label: {
                     text: '消极',
@@ -384,24 +365,10 @@
                         });
                     }
                     return data;
-                }())
+                }()),
+
             }
-            // ,{
-            //   name: 'Random2',
-            //   data: (function() {
-            //       // generate an array of random data
-            //       var data = [],
-            //           time = (new Date()).getTime(),
-            //           i;
-            //       for (i = -19; i <= 0; i += 1) {
-            //           data.push({
-            //               x: time + i * 1000,
-            //               y: Math.random()
-            //           });
-            //       }
-            //       return data;
-            //   }())
-            // }
+
         ];
         var tooltip = {
             formatter: function() {
@@ -426,7 +393,7 @@
         json.chart = chart;
         json.plotOptions = plotOptions;
         json.tooltip = tooltip;
-        $('#1').highcharts(json);
+        myChart = $('#1').highcharts(json);
     }
 
     wehaveCloud = function() {

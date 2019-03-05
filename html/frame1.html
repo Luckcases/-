@@ -12,17 +12,17 @@
         body {
             background-color: #f0f0f0;
         }
-
+        
         .space {
             height: 10px;
         }
-
+        
         .room_info {
             height: 60px;
             background-color: #fff;
             border-bottom: 1px #f0f0f0 solid;
         }
-
+        
         .innerLeft {
             width: 60px;
             display: inline-block;
@@ -31,12 +31,12 @@
             overflow: hidden;
             position: relative;
         }
-
+        
         .innerLeft img {
             height: 60px;
             width: 60px;
         }
-
+        
         .innerMid {
             position: relative;
             top: -7px;
@@ -44,27 +44,27 @@
             width: 200px;
             display: inline-block;
         }
-
+        
         .innerMid .firstSpan {
             line-height: 35px;
             font-size: 15px;
         }
-
+        
         .innerMid .secondSpan {
             line-height: 25px;
             font-size: 12px;
             color: rgb(150, 150, 150);
         }
-
+        
         .search_bar {
             height: 35px;
             width: 100%;
         }
-
+        
         .search_parent {
             position: fixed;
         }
-
+        
         .search_btn {
             height: 35px;
             width: 35px;
@@ -79,7 +79,7 @@
             cursor: pointer;
             z-index: 2;
         }
-
+        
         .search_text {
             width: 100%;
             height: 35px;
@@ -89,13 +89,13 @@
             border-bottom: 1px solid rgba(200, 200, 200, 0.5);
             z-index: 1;
         }
-
+        
         .cancel_btn {
             float: right;
             height: 35px;
             width: 35px;
             position: fixed;
-            background: url('../image/search_btn.jpg');
+            background: url('../image/cancel.jpg');
             background-color: #f0f0f0;
             background-position: center;
             background-size: 20px 20px;
@@ -105,7 +105,7 @@
             cursor: pointer;
             z-index: 2;
         }
-
+        
         .slide-btn {
             height: 23px;
             width: 72px;
@@ -120,7 +120,7 @@
             overflow: hidden;
             cursor: pointer;
         }
-
+        
         .slide-btn .inner-on,
         .slide-btn .inner-off {
             width: 150px;
@@ -130,17 +130,17 @@
             left: -51px;
             cursor: pointer;
         }
-
+        
         .inner-off {
             background: #f0f0f0;
             transition: left 0.5s;
         }
-
+        
         .inner-on {
             background-color: rgba(100, 149, 237, 0.5);
             transition: left 0.5s;
         }
-
+        
         .inner-on .space,
         .inner-off .space {
             position: relative;
@@ -161,12 +161,21 @@
 </head>
 
 <body>
+    <!-- 上部搜索条和排序 -->
     <div class="search_bar">
-      <div class="search_parent" >
-          <input type="button" id='search_btn' class="search_btn">
-          <input type="text" class="search_text" placeholder="搜索" id='search_text' onchange="searchBy()">
-      </div>
+        <div class="search_parent">
+            <input type="button" id='search_btn' class="search_btn">
+            <input type="text" class="search_text" placeholder="搜索" id='search_text' onchange="searchBy()">
+            <input type="text" class="sort_type" id="sort_type" readonly="readonly" onclick="sortBy()">
+        </div>
     </div>
+    <!-- 隐藏的排序按钮 -->
+    <div class="SortArea" id="SortArea">
+        <p onclick="changeSortType(0)" class="pp" id='Sort0'>按时间排序</p>
+        <div class="divider"></div>
+        <p onclick="changeSortType(1)" class="pp" id='Sort1'>按风险排序</p>
+    </div>
+
     <div class="space" id='flag'></div>
     <!-- <div class="room_info">
         <div class="innerLeft">
@@ -189,12 +198,35 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
 <script type="text/javascript">
+    var token = localStorage.getItem("token");
     apiready = function() {
-        var hisList = getHistoryInfo();
+        getHistoryInfo();
+        initSort();
+    }
+
+    initSort = function() { //在页面加载时初始化与排序有关的组件
+        var toleft = document.documentElement.clientWidth - 45 - 1;
+        $('#sort_type').css({
+            "margin-left": toleft
+        });
+        $api.byId('sort_type').value = '排序';
+        toleft = document.documentElement.clientWidth - 100;
+        $('#SortArea').css({
+            "margin-left": toleft
+        });
+    }
+
+    changeSortType = function(i) { //排序选项点击事件
+        j = (i + 1) % 2
+        $("#Sort" + i).addClass("chosen");
+        $("#Sort" + j).removeClass("chosen");
+    }
+
+    sortBy = function(i) { //打开排序选项框
+        $("#SortArea").slideToggle(500);
     }
 
     getHistoryInfo = function() {
-        var token = localStorage.getItem("token");
         api.ajax({
             url: 'http://47.98.53.200:5000/danmu/history/',
             method: 'get',
@@ -215,6 +247,7 @@
             for (var i in ret.results) {
                 js += createTheTab(ret.results[i].id);
             }
+            $('div').remove('.room_info');
             $("#flag").after(js);
             for (var n in ret.results) {
                 if (ret.results[n].is_supervising == false) {
@@ -248,8 +281,8 @@
         $("#search_btn").attr({
             "onclick": "cancelSearch()",
             "class": "cancel_btn",
-            "type":"button",
-            "id":'search_btn'
+            "type": "button",
+            "id": 'search_btn'
         });
 
         //关闭旧请求进行新的http请求
@@ -257,9 +290,8 @@
             tag: 'search'
         });
         var roomId = $api.byId('search_text').value;
-        alert(roomId);
         api.ajax({
-            url: 'http://47.98.53.200/search/rooms/',
+            url: 'http://47.98.53.200:5000/search/rooms/',
             method: 'post',
             tag: 'search',
             headers: {
@@ -269,29 +301,40 @@
                 // 'Connection': 'keep-alive'
             },
             data: {
-                values: {
+                body: {
                     'roomId': roomId,
-                    'query': 'rooms'
+                    'query': 'danmu'
                 }
             }
         }, function(ret, err) {
-            alert(JSON.stringify(ret));
-            alert(JSON.stringify(err));
+            var js = '';
+            for (var i in ret.results) {
+                js += createTheTab(ret.results[i].id);
+            }
+            $('div').remove('.room_info');
+            $("#flag").after(js);
+            for (var n in ret.results) {
+                if (ret.results[n].is_supervising == false) {
+                    changeOpen(ret.results[n].id);
+                }
+            }
+            if (err) {
+                alert(JSON.stringify(err));
+            }
         });
 
     }
 
     cancelSearch = function() {
-      $("#search_btn").attr({
-          "onclick": " ",
-          "class": "search_btn"
-      });
+        $("#search_btn").attr({
+            "onclick": " ",
+            "class": "search_btn"
+        });
 
-      $('#search_text').value = '';
+        $api.byId('search_text').value = '';
 
-      apiready();
+        getHistoryInfo();
 
-      alert("can");
     }
 
     openHistory = function(id) {

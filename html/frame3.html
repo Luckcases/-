@@ -155,6 +155,48 @@
     apiready = function() {
 
     };
+
+    fnMymes = function(){
+      api.ajax({
+          url: 'http://47.98.53.200:5000/user/manage',
+          method: 'get',
+          headers: {
+              'Content-Type': 'application/json',//;charset=utf-8',
+              'authorization': 'JWT ' + token,
+              //"enctype": "multipart/form-data"
+          },
+      },function(ret, err){
+          if (ret) {
+              var rets = ret;
+              var val = "用户名：" + rets.username + "\n" + "绑定邮箱：" + rets.email;
+              alert(val);
+          } else {
+              alert( JSON.stringify( err ) );
+          }
+      });
+    }
+
+    fnEdit = function(){
+      api.openWin({
+          name: 'userEdit',
+          url: 'userEdit.html',
+          pageParam: {
+              name: 'test'
+          }
+      });
+    }
+
+    fnSetGender = function(){
+      api.openWin({
+          name: 'userChangePass',
+          url: 'userChangePass.html',
+          pageParam: {
+              name: 'test'
+          }
+      });
+
+    }
+
 </script>
 
 </html>
