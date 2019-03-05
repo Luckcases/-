@@ -12,31 +12,29 @@
         body {
             background-color: #f0f0f0;
         }
-        
+
         .space {
-            height: 10px;
         }
-        
-        .room_info {
+
+        /*房间信息*/
+        .room_info{
+          margin-top: 15px;
+          height: 300px;
+          width: 100%;
+          background-color: #fff;
+        }
+
+        .room_info_top {
+          height: 240px;
+          width: 100%;
+          overflow: hidden;
+        }
+
+        .room_info_buttom {
             height: 60px;
-            background-color: #fff;
             border-bottom: 1px #f0f0f0 solid;
         }
-        
-        .innerLeft {
-            width: 60px;
-            display: inline-block;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .innerLeft img {
-            height: 60px;
-            width: 60px;
-        }
-        
+
         .innerMid {
             position: relative;
             top: -7px;
@@ -44,27 +42,28 @@
             width: 200px;
             display: inline-block;
         }
-        
+
         .innerMid .firstSpan {
             line-height: 35px;
             font-size: 15px;
         }
-        
+
         .innerMid .secondSpan {
             line-height: 25px;
             font-size: 12px;
             color: rgb(150, 150, 150);
         }
-        
+
+        /*搜索模块*/
         .search_bar {
             height: 35px;
             width: 100%;
         }
-        
+
         .search_parent {
             position: fixed;
         }
-        
+
         .search_btn {
             height: 35px;
             width: 35px;
@@ -77,19 +76,9 @@
             background-clip: border-box;
             background-attachment: fixed;
             cursor: pointer;
-            z-index: 2;
+            z-index: 102;
         }
-        
-        .search_text {
-            width: 100%;
-            height: 35px;
-            padding-left: 35px;
-            position: fixed;
-            background-color: #f0f0f0;
-            border-bottom: 1px solid rgba(200, 200, 200, 0.5);
-            z-index: 1;
-        }
-        
+
         .cancel_btn {
             float: right;
             height: 35px;
@@ -98,14 +87,36 @@
             background: url('../image/cancel.jpg');
             background-color: #f0f0f0;
             background-position: center;
-            background-size: 20px 20px;
+            background-size: 35px 35px;
             background-repeat: no-repeat;
             background-clip: border-box;
             background-attachment: fixed;
             cursor: pointer;
-            z-index: 2;
+            z-index: 102;
         }
-        
+
+        .search_text {
+            width: 100%;
+            height: 35px;
+            padding-left: 35px;
+            position: fixed;
+            background-color: #f0f0f0;
+            border-bottom: 1px solid rgba(220, 220, 220, 0.3);
+            z-index: 101;
+        }
+
+        /*排序模块，位于搜索模块右侧*/
+        .sort_type {
+            width: 45px;
+            height: 35px;
+            position: fixed;
+            color: rgb(150, 150, 150);
+            text-align: center;
+            border-left: 1px solid rgba(220, 220, 220, 0.3);
+            z-index: 102;
+        }
+
+        /*滑动开关*/
         .slide-btn {
             height: 23px;
             width: 72px;
@@ -120,7 +131,7 @@
             overflow: hidden;
             cursor: pointer;
         }
-        
+
         .slide-btn .inner-on,
         .slide-btn .inner-off {
             width: 150px;
@@ -130,17 +141,17 @@
             left: -51px;
             cursor: pointer;
         }
-        
+
         .inner-off {
             background: #f0f0f0;
             transition: left 0.5s;
         }
-        
+
         .inner-on {
             background-color: rgba(100, 149, 237, 0.5);
             transition: left 0.5s;
         }
-        
+
         .inner-on .space,
         .inner-off .space {
             position: relative;
@@ -157,6 +168,28 @@
             background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
             border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
         }
+        /*排序选择按钮容器*/
+
+        .SortArea {
+            display: none;
+            width: 100px;
+            height: 148px;
+            position: fixed;
+            background-color: #f0f0f0;
+            z-index: 102;
+            border-top: 1px solid #dddddd;
+        }
+
+        .SortArea .pp {
+            width: 100%;
+            height: 37px;
+            line-height: 37px;
+            text-align: center;
+        }
+
+        .chosen {
+            background-color: #dddddd;
+        }
     </style>
 </head>
 
@@ -170,28 +203,32 @@
         </div>
     </div>
     <!-- 隐藏的排序按钮 -->
-    <div class="SortArea" id="SortArea">
-        <p onclick="changeSortType(0)" class="pp" id='Sort0'>按时间排序</p>
-        <div class="divider"></div>
-        <p onclick="changeSortType(1)" class="pp" id='Sort1'>按风险排序</p>
+    <div class="SortArea" id ="SortArea">
+      <p onclick="changeSortType(0)" class="pp" id = 'Sort0'>时间顺序</p>
+      <p onclick="changeSortType(1)" class="pp" id = 'Sort1'>时间逆序</p>
+      <p onclick="changeSortType(2)" class="pp" id = 'Sort2'>风险顺序</p>
+      <p onclick="changeSortType(3)" class="pp" id = 'Sort3'>风险逆序</p>
     </div>
 
     <div class="space" id='flag'></div>
-    <!-- <div class="room_info">
-        <div class="innerLeft">
+    <!-- 房间信息控件 -->
+    <div class="room_info">
+        <div class="room_info_top">
             <img alt="" src="../image/forumPic.png">
         </div>
-        <div class="innerMid" onclick="openHistory()">
-            <span class="firstSpan">房间号：9532614</span>
-            <span class="secondSpan">累计监控时长：10h</span>
-        </div>
-        <div class="slide-btn">
-            <div class="inner-on" id="inner">
-                <input style="display:none;" type="checkbox" checked>
-                <span class="space"></span>
+        <div class="room_info_buttom">
+            <div class="innerMid" onclick="openHistory()">
+                <span class="firstSpan">房间号：9532614</span>
+                <span class="secondSpan">累计监控时长：10h</span>
+            </div>
+            <div class="slide-btn">
+                <div class="inner-on" id="inner">
+                    <input style="display:none;" type="checkbox" checked>
+                    <span class="space"></span>
+                </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
 
 </body>
@@ -216,10 +253,15 @@
         });
     }
 
-    changeSortType = function(i) { //排序选项点击事件
-        j = (i + 1) % 2
-        $("#Sort" + i).addClass("chosen");
-        $("#Sort" + j).removeClass("chosen");
+    changeSortType = function(i){ //排序选项点击事件
+      var SortWays = ['ascend_time','descent_time','ascend_level','descent_level'];
+      var j = (i + 1) % 4;
+      var k = (i + 2) % 4;
+      var l = (i + 3) % 4;
+      $("#Sort" + i).addClass("chosen");
+      $("#Sort" + k).removeClass("chosen");
+      $("#Sort" + j).removeClass("chosen");
+      $("#Sort" + l).removeClass("chosen");
     }
 
     sortBy = function(i) { //打开排序选项框
@@ -242,7 +284,7 @@
             //     }
             // }
         }, function(ret, err) {
-            // alert(JSON.stringify(ret));
+            alert(JSON.stringify(ret));
             var js = '';
             for (var i in ret.results) {
                 js += createTheTab(ret.results[i].id);
@@ -276,6 +318,23 @@
         return str;
     }
 
+    // 房间打开或关闭的状态改变
+    changeOpen = function(id) {
+        var Item = document.getElementById(id);
+        if (Item.className == "inner-on") {
+            // if (Item.attr("class") == "inner-on") {
+            Item.style.left = 0 + "px";
+            Item.childNodes[1].checked = false;
+            Item.className = "inner-off";
+            // Item.addClass('inner-off');
+        } else {
+            Item.style.left = -51 + "px";
+            Item.childNodes[1].checked = true;
+            Item.className = "inner-on";
+        }
+    }
+
+    // 搜索事件
     searchBy = function() {
         //修改按钮格式
         $("#search_btn").attr({
@@ -350,20 +409,6 @@
     }
 
 
-    changeOpen = function(id) {
-        var Item = document.getElementById(id);
-        if (Item.className == "inner-on") {
-            // if (Item.attr("class") == "inner-on") {
-            Item.style.left = 0 + "px";
-            Item.childNodes[1].checked = false;
-            Item.className = "inner-off";
-            // Item.addClass('inner-off');
-        } else {
-            Item.style.left = -51 + "px";
-            Item.childNodes[1].checked = true;
-            Item.className = "inner-on";
-        }
-    }
 </script>
 
 </html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+          body{
+
+          }
+
+          .iframeC{
+            height: 100%;
+            width: 100%;
+          }
+
+      </style>
+  </head>
+  <body>
+    <iframe class="iframeC" src='https://www.douyu.com/' id = 'douyu_frame'></iframe>
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+        var Rid = localStorage.getItem('Rid');
+        alert(Rid);
+        var Url = 'https://www.douyu.com/';
+        if(Rid){
+          Url += Rid;
+        }
+        $("#douyu_frame").attr({
+            "src": Url
+        });
+      };
+
+      addByclick = function(){
+         var test = $("#douyu_frame").attr("src");
+         alert(test);
+         api.ajax({
+             url: 'http://47.98.53.200:5000/search/rooms/',
+             method: 'put',
+             headers: {
+                 'Content-Type': 'application/json;charset=utf-8',
+                 'authorization': 'JWT ' + token,
+                 "enctype": "multipart/form-data",
+                 // 'Connection': 'keep-alive'
+             },
+             data: {
+                 body: {
+                     'roomId': roomId,
+                 }
+             }
+         }, function(ret, err) {
+             if (err) {
+                 alert(JSON.stringify(err));
+             } else {
+                 alert(JSON.stringify(ret));
+             }
+         });
+      }
+  </script>
+  </html>
