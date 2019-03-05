@@ -158,6 +158,24 @@
 <script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
 <script type="text/javascript">
     apiready = function() {
+      var token = localStorage.getItem('token');
+      api.ajax({
+          url: 'http://47.98.53.200:5000/danmu/statistic/',
+          method: 'get',
+          headers: {
+              'Content-Type': 'application/json;charset=utf-8',
+              'authorization': 'JWT ' + token,
+              "enctype": "multipart/form-data",
+              // 'Connection': 'keep-alive'
+          }
+      },function(ret, err){
+          if (ret) {
+              alert( JSON.stringify( ret ) );
+          } else {
+              alert( JSON.stringify( err ) );
+          }
+      });
+
 
     }
 

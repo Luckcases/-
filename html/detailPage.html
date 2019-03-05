@@ -161,9 +161,7 @@
             <div class="cavCont-back" id='1'></div>
         </div>
         <div class="opRoom">
-            <div class="baseInfo"><span id='roomIdcon'></span><img src='../image/refresh.jpg' onclick="turnYourFace()"></div>
-            <div class="cloud" id='cloud'>
-            </div>
+            <div class="baseInfo"><span id='roomIdcon'></span><img src='../image/refresh.png' onclick="turnYourFace()"></div>
         </div>
         <div class="textInfo">
             <div class="textDe">
@@ -197,7 +195,7 @@
     requstforLong = function(chart) {
         var result = [];
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "http://47.98.53.200:5000/danmu/analyse/", true);
+        xmlhttp.open("POST", "http://47.98.53.200:5000/danmu/analyse/2/", true);
         xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=utf-8', 'authorization', 'JWT ' + token, 'enctype', 'multipart/form-data');//设置头部
         var json = {};
         json.roomId = Rid;
@@ -206,7 +204,7 @@
                 console.log('已收到服务器响应的标头');
             } else if (xmlhttp.readyState == 3) {
                 result = xmlhttp.responseText.split(',');//将服务器返回的字符串变为数组
-                setInterval(chart.addPoint([(new Date()).getTime(), parseInt(result[result.length - 2])], true, true),1000);
+                chart.addPoint([(new Date()).getTime(), parseInt(result[result.length - 2])], true, true);
                 console.log(result);
             } else if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                 console.log('服务器响应完毕!!');
@@ -217,9 +215,9 @@
     }
 
     init = function() {
+        $('#roomIdcon').html('房间号'+Rid);
         createPie();
         createChart();
-        wehaveCloud();
     }
 
     createPie = function() {
@@ -394,38 +392,6 @@
         json.plotOptions = plotOptions;
         json.tooltip = tooltip;
         myChart = $('#1').highcharts(json);
-    }
-
-    wehaveCloud = function() {
-        var text =
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean bibendum erat ac justo sollicitudin, quis lacinia ligula fringilla. Pellentesque hendrerit, nisi vitae posuere condimentum, lectus urna accumsan libero, rutrum commodo mi lacus pretium erat. Phasellus pretium ultrices mi sed semper. Praesent ut tristique magna. Donec nisl tellus, sagittis ut tempus sit amet, consectetur eget erat. Sed ornare gravida lacinia. Curabitur iaculis metus purus, eget pretium est laoreet ut. Quisque tristique augue ac eros malesuada, vitae facilisis mauris sollicitudin. Mauris ac molestie nulla, vitae facilisis quam. Curabitur placerat ornare sem, in mattis purus posuere eget. Praesent non condimentum odio. Nunc aliquet, odio nec auctor congue, sapien justo dictum massa, nec fermentum massa sapien non tellus. Praesent luctus eros et nunc pretium hendrerit. In consequat et eros nec interdum. Ut neque dui, maximus id elit ac, consequat pretium tellus. Nullam vel accumsan lorem.';
-        var lines = text.split(/[,\. ]+/g),
-            data = Highcharts.reduce(lines, function(arr, word) {
-                var obj = Highcharts.find(arr, function(obj) {
-                    return obj.name === word;
-                });
-                if (obj) {
-                    obj.weight += 1;
-                } else {
-                    obj = {
-                        name: word,
-                        weight: 1
-                    };
-                    arr.push(obj);
-                }
-                return arr;
-            }, []);
-
-        Highcharts.chart('cloud', {
-            series: [{
-                type: 'wordcloud',
-                data: data,
-                name: 'Occurrences'
-            }],
-            title: {
-                text: ''
-            }
-        });
     }
 
     turnYourFace = function() {

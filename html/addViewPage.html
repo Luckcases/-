@@ -10,6 +10,51 @@
 
           }
 
+          .topbar {
+              background: rgb(41, 41, 41);
+              height: 50px;
+              border-bottom: 1px solid #DDDFE3;
+              position: relative;
+          }
+
+          .egret-img {
+              position: absolute;
+          }
+
+          .egret-img img {
+              height: 30px;
+              padding: 10px;
+              vertical-align: top;
+          }
+
+          .egret-header-text {
+              line-height: 50px;
+              color: #fff;
+              font-size: 16px;
+              padding: 0 10px;
+          }
+
+          .egret-header-title {
+              position: absolute;
+              width: 100%;
+              text-align: center;
+              line-height: 50px;
+              color: #fff;
+              font-size: 20px;
+          }
+
+          .egret-img-right{
+            position: absolute;
+            display: inline-block;
+          }
+
+          .egret-img-Right span{
+            text-align: center;
+            width: 50px;
+            color: #fff;
+            line-height: 50px;
+          }
+
           .iframeC{
             height: 100%;
             width: 100%;
@@ -18,23 +63,39 @@
       </style>
   </head>
   <body>
-    <iframe class="iframeC" src='https://www.douyu.com/' id = 'douyu_frame'></iframe>
-
+    <div id="secHeader" class="titlebar">
+        <div class="egret-header topbar">
+            <div class="egret-header-title">添加房间</div>
+            <div class="egret-img"><img src="../image/cm2_icn_back.png" alt="" onclick="goback()"></div>
+            <div  class="egret-img-Right" id ="egret-img-Right"><span>添加</span></div>
+        </div>
+    </div>
+    <!-- <iframe class="iframeC" src='https://www.douyu.com/' id = 'douyu_frame'></iframe> -->
   </body>
   <script type="text/javascript" src="../script/api.js"></script>
   <script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
   <script type="text/javascript">
       apiready = function(){
-        var Rid = localStorage.getItem('Rid');
-        alert(Rid);
-        var Url = 'https://www.douyu.com/';
-        if(Rid){
-          Url += Rid;
-        }
-        $("#douyu_frame").attr({
-            "src": Url
+        var toleft = document.documentElement.clientWidth - 50;
+        $('#egret-img-Right').css({
+            "margin-left": toleft
         });
+        // var Rid = localStorage.getItem('Rid');
+        // alert(Rid);
+        // var Url = 'https://www.douyu.com/';
+        // if(Rid){
+        //   Url += Rid;
+        // }
+        // $("#douyu_frame").attr({
+        //     "src": Url
+        // });
       };
+
+      goback = function(){
+        api.closeWin({
+            name: 'addViewPage'
+        });
+      }
 
       addByclick = function(){
          var test = $("#douyu_frame").attr("src");

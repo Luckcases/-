@@ -15,24 +15,24 @@
             border-bottom: 1px solid #DDDFE3;
             position: relative;
         }
-        
+
         .egret-img {
             position: absolute;
         }
-        
+
         .egret-img img {
             height: 30px;
             padding: 10px;
             vertical-align: top;
         }
-        
+
         .egret-header-text {
             line-height: 50px;
             color: #fff;
             font-size: 16px;
             padding: 0 10px;
         }
-        
+
         .egret-header-title {
             position: absolute;
             width: 100%;
@@ -41,13 +41,13 @@
             color: #fff;
             font-size: 20px;
         }
-        
+
         .container {
             width: 100%;
             height: 50px;
             margin-top: 100px;
         }
-        
+
         .parent {
             width: 90%;
             height: 42px;
@@ -55,7 +55,7 @@
             left: 20px;
             position: relative;
         }
-        
+
         .parent>input:first-of-type {
             /*输入框高度设置为40px, border占据2px，总高度为42px*/
             width: 70%;
@@ -64,16 +64,16 @@
             font-size: 16px;
             outline: none;
         }
-        
+
         .parent>input:first-of-type:focus {
             border: 1px solid #317ef3;
             padding-left: 10px;
         }
-        
+
         .parent>input:last-of-type {
             /*button按钮border并不占据外围大小，设置高度42px*/
             width: 25%;
-            height: 44px;
+            height: 42px;
             position: absolute;
             background: #317ef3;
             border: 1px solid #317ef3;
@@ -81,13 +81,13 @@
             font-size: 16px;
             outline: none;
         }
-        
+
         .btn_view_container {
             width: 100%;
             height: 30px;
             text-align: center;
         }
-        
+
         .btn_view_container input {
             height: 30px;
             line-height: 30px;
@@ -99,8 +99,8 @@
 <body>
     <div id="secHeader" class="titlebar">
         <div class="egret-header topbar">
-            <div class="egret-header-title">check</div>
-            <div class="egret-img"><img src="../image/cm2_icn_back.png" alt="" onclick="addByclick()"></div>
+            <div class="egret-header-title">添加房间</div>
+            <div class="egret-img"><img src="../image/cm2_icn_back.png" alt="" onclick="goback()"></div>
             <!-- <div  class="egret-img toRight"><img src="../../image/cm2_poplay_icn_reply.png" alt="" onclick="emptycache()" ></div> -->
         </div>
     </div>
@@ -124,14 +124,13 @@
 <script type="text/javascript">
     apiready = function() {
         alert('找到对应的直播间点击添加按钮即可添加监控');
-        creatBut();
     }
 
     addNewRoom = function() {
         roomId = $api.byId('Rid').value;
         var token = localStorage.getItem('token');
         api.ajax({
-            url: 'http://47.98.53.200:5000/search/rooms/',
+            url: 'http://47.98.53.200:5000/danmu/analyse/1/',
             method: 'put',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -153,56 +152,21 @@
         });
     }
 
-    creatBut = function() { //创建一个可拖拽的悬浮按钮
-        var butstr = "<div class='info-nr' id='info-nr' onclick = 'openUpload()'>" +
-            "<div id='info-nr-phone' class='info-nr-phone'>" +
-            "<section id='toMenu'></section>" +
-            "</div>" +
-            "</div>"
-
-        $("#im").before(butstr);
-
-        var screenHeight = document.documentElement.clientHeight;
-        var fdiv = document.getElementById("info-nr");
-        fdiv.addEventListener('ontouchstart', function(event) {
-            onBut = 1;
-        }, false);
-        fdiv.addEventListener('touchmove', function(event) {
-            // 如果这个元素的位置内只有一个手指的话
-            onBut = 1;
-            if (event.targetTouches.length == 1) {
-                event.preventDefault(); // 阻止浏览器默认事件，重要
-                var touch = event.targetTouches[0];
-                if ((touch.pageY) <= 70) { //超过顶部
-                    fdiv.style.top = "70px";
-                } else if (touch.pageY > (screenHeight - parseInt(fdiv.clientHeight))) { //超过底部
-                    fdiv.style.top = (screenHeight - parseInt(fdiv.clientHeight)) - 70 + "px";
-                } else {
-                    fdiv.style.top = (touch.pageY - parseInt(fdiv.clientHeight) / 2) + "px";
-                }
-                if ((touch.pageX) <= 60) { //超过顶部
-                    fdiv.style.right = api.winWidth - 70 + "px";
-                } else if (touch.pageX > (api.winWidth - 3)) { //超过底部
-                    fdiv.style.right = 3 + "px";
-                } else {
-                    fdiv.style.right = (api.winWidth - touch.pageX) + "px";
-                }
-            }
-        }, false);
-        fdiv.addEventListener('ontouchend', function(event) {
-            onBut = 0;
-        }, false)
-    }
-
     openViewPage = function() {
         api.openWin({
-            name: 'viewPage',
-            url: './viewPage.html',
+            name: 'addViewPage',
+            url: 'addViewPage.html',
             pageParam: {
                 name: 'test'
             }
         });
 
+    }
+
+    goback = function(){
+      api.closeWin({
+          name: 'addNew'
+      });
     }
 </script>
 

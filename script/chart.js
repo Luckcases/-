@@ -413,3 +413,16 @@ var wordCloud = {
         });
     }
 }
+
+//倒序函数
+bottomAboveTop = function(ret){
+  ret.results = Turn(ret.results);
+  return ret;
+}
+Turn = function(arr) {
+  var temp = [];
+  for (var i in arr){
+    temp[i] = arr[arr.length-i-1];
+  }
+  return temp;
+}

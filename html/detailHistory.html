@@ -11,6 +11,7 @@
             background-color: #6c6c6c;
             min-height: 100%;
         }
+        /*头部*/
 
         .titlebar {
             background-color: inherit;
@@ -53,6 +54,7 @@
             perspective: 500;
             -webkit-perspective: 500;
         }
+        /*左侧隐藏的筛选页面*/
 
         .leftPanel {
             /*padding-top:;*/
@@ -61,6 +63,7 @@
             background-color: rgb(250, 250, 250);
             position: fixed;
             z-index: 99;
+            display: none;
         }
 
         .leftPanel .pinleft {
@@ -119,6 +122,7 @@
         .picCont {
             background-color: rgb(150, 150, 150);
         }
+        /*搜索条*/
 
         .search_bar {
             height: 35px;
@@ -155,6 +159,7 @@
             background-color: #fff;
             z-index: 100;
         }
+        /*图表容器*/
 
         .cavCont {
             width: 100%;
@@ -189,19 +194,11 @@
             transform: rotateY(-180deg);
             -webkit-transform: rotateY(-180deg);
         }
-        /*.cavCont:hover .cavCont-front {
-            transform: rotateY(-180deg);
-            -webkit-transform: rotateY(-180deg);
-        }
-
-        .cavCont:hover .cavCont-back {
-            transform: rotateY(-360deg);
-            -webkit-transform: rotateY(-360deg);
-        }*/
 
         .opRoom {
             height: 300px;
         }
+        /*下部信息框*/
 
         .baseInfo {
             height: 35px;
@@ -217,6 +214,7 @@
             width: 35px;
             float: right;
         }
+        /*词云容器*/
 
         .cloud {
             height: 250px;
@@ -265,10 +263,10 @@
             <div class='Datebut' onclick="chooseTime(2)" id='Dbut2'><span>近一月</span></div>
         </div>
         <div class="pinright" id='panelR1'>
-          <div class='Datebut' onclick="chooseSort(0)" id='Sbut0'><span>时间顺序</span></div>
-          <div class='Datebut' onclick="chooseSort(1)" id='Sbut1'><span>时间逆序</span></div>
-          <div class='Datebut' onclick="chooseSort(2)" id='Sbut2'><span>风险顺序</span></div>
-          <div class='Datebut' onclick="chooseSort(3)" id='Sbut2'><span>风险逆序</span></div>
+            <div class='Datebut' onclick="chooseSort(0)" id='Sbut0'><span>时间顺序</span></div>
+            <div class='Datebut' onclick="chooseSort(1)" id='Sbut1'><span>时间逆序</span></div>
+            <div class='Datebut' onclick="chooseSort(2)" id='Sbut2'><span>风险顺序</span></div>
+            <div class='Datebut' onclick="chooseSort(3)" id='Sbut2'><span>风险逆序</span></div>
         </div>
     </div>
 
@@ -277,11 +275,11 @@
         <!-- <div class="cavCont">
             <div class="cavCont-front" id='0'></div>
             <div class="cavCont-back" id='1'></div>
-        </div>
-        <div class="opRoom">
-            <div class="baseInfo"><span id='roomIdcon'></span><img src='../image/turnover.jpg' onclick="turnYourFace()"></div>
-            <div class="cloud" id='cloud'></div>
         </div> -->
+        <div class="opRoom">
+            <div class="baseInfo"><span id='roomIdcon'></span></div>
+            <div class="cloud" id='cloud'></div>
+        </div>
         <div class="textInfo">
             <div class="textDe">
                 <span>消极比例：12%</span>
@@ -298,6 +296,7 @@
 </body>
 <script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="../script/highcharts.js"></script>
+<script type="text/javascript" src="../script/wordcloud.js"></script>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
     var ifFront = 0;
@@ -305,7 +304,6 @@
     localStorage.removeItem('Rid');
     apiready = function() {
         init();
-        //$("#fuk").hide(500);
         changeType(0);
         getRoomHistory();
     };
@@ -316,8 +314,8 @@
         wehaveCloud();
     }
 
-    getRoomHistory = function(){
-      chooseSort(1);
+    getRoomHistory = function() {
+        chooseSort(1);
     }
 
     openleftPanel = function() {
@@ -340,37 +338,37 @@
         $("#Dbut" + j).removeClass("Datebut-choosen");
     }
 
-    chooseSort = function(i){
-      var SortWays = ['ascend_time','descent_time','ascend_level','descent_level']
-      j = (i + 1) % 4;
-      k = (i + 2) % 4;
-      l = (i + 3) % 4;
-      $("#Sbut" + i).addClass("Datebut-choosen");
-      $("#Sbut" + k).removeClass("Datebut-choosen");
-      $("#Sbut" + j).removeClass("Datebut-choosen");
-      $("#Sbut" + l).removeClass("Datebut-choosen");
+    chooseSort = function(i) {
+        var SortWays = ['ascend_time', 'descent_time', 'ascend_level', 'descent_level']
+        j = (i + 1) % 4;
+        k = (i + 2) % 4;
+        l = (i + 3) % 4;
+        $("#Sbut" + i).addClass("Datebut-choosen");
+        $("#Sbut" + k).removeClass("Datebut-choosen");
+        $("#Sbut" + j).removeClass("Datebut-choosen");
+        $("#Sbut" + l).removeClass("Datebut-choosen");
 
 
-      var token = localStorage.getItem("token");
-      api.ajax({
-          url: 'http://47.98.53.200:5000/danmu/history/',
-          method: 'post',
-          headers: {
-              //'Content-Type': 'application/json;charset=utf-8',
-              'authorization': 'JWT ' + token,
-              // "enctype": "multipart/form-data",
-              // 'Connection': 'keep-alive'
-          },
-          data: {
-              values: {
-                  'roomId': Rid,
-                  'sortBy': SortWays[i]
-              }
-          }
-      }, function(ret, err) {
-          alert(JSON.stringify(ret));
-          //alert(JSON.stringify(err));
-      });
+        var token = localStorage.getItem("token");
+        api.ajax({
+            url: 'http://47.98.53.200:5000/danmu/history/',
+            method: 'post',
+            headers: {
+                //'Content-Type': 'application/json;charset=utf-8',
+                'authorization': 'JWT ' + token,
+                // "enctype": "multipart/form-data",
+                // 'Connection': 'keep-alive'
+            },
+            data: {
+                values: {
+                    'roomId': Rid,
+                    'sortBy': SortWays[i]
+                }
+            }
+        }, function(ret, err) {
+            alert(JSON.stringify(ret));
+            //alert(JSON.stringify(err));
+        });
 
     }
 
@@ -502,53 +500,46 @@
     }
 
     wehaveCloud = function() {
-      api.ajax({
-          url: 'http://47.98.53.200:5000/danmu/wordcloud/',
-          method: 'post',
-          headers: {
-              //'Content-Type': 'application/json;charset=utf-8',
-              'authorization': 'JWT ' + token,
-              // "enctype": "multipart/form-data",
-              // 'Connection': 'keep-alive'
-          },
-          data: {
-              values: {
-                  'roomId': Rid
-              }
-          }
-      }, function(ret, err) {
-          alert(JSON.stringify(ret));
-      });
-
-        var text =
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean bibendum erat ac justo sollicitudin, quis lacinia ligula fringilla. Pellentesque hendrerit, nisi vitae posuere condimentum, lectus urna accumsan libero, rutrum commodo mi lacus pretium erat. Phasellus pretium ultrices mi sed semper. Praesent ut tristique magna. Donec nisl tellus, sagittis ut tempus sit amet, consectetur eget erat. Sed ornare gravida lacinia. Curabitur iaculis metus purus, eget pretium est laoreet ut. Quisque tristique augue ac eros malesuada, vitae facilisis mauris sollicitudin. Mauris ac molestie nulla, vitae facilisis quam. Curabitur placerat ornare sem, in mattis purus posuere eget. Praesent non condimentum odio. Nunc aliquet, odio nec auctor congue, sapien justo dictum massa, nec fermentum massa sapien non tellus. Praesent luctus eros et nunc pretium hendrerit. In consequat et eros nec interdum. Ut neque dui, maximus id elit ac, consequat pretium tellus. Nullam vel accumsan lorem.';
-        var lines = text.split(/[,\. ]+/g),
-            data = Highcharts.reduce(lines, function(arr, word) {
-                var obj = Highcharts.find(arr, function(obj) {
-                    return obj.name === word;
-                });
-                if (obj) {
-                    obj.weight += 1;
-                } else {
-                    obj = {
-                        name: word,
-                        weight: 1
-                    };
-                    arr.push(obj);
+        var token = localStorage.getItem("token");
+        var retArr = [];
+        var retJson;
+        api.ajax({
+            url: 'http://47.98.53.200:5000/danmu/wordcloud/',
+            method: 'post',
+            headers: {
+                //'Content-Type': 'application/json;charset=utf-8',
+                'authorization': 'JWT ' + token,
+                // "enctype": "multipart/form-data",
+                // 'Connection': 'keep-alive'
+            },
+            data: {
+                values: {
+                    'roomId': Rid
                 }
-                return arr;
-            }, []);
-
-        Highcharts.chart('cloud', {
-            series: [{
-                type: 'wordcloud',
-                data: data,
-                name: 'Occurrences'
-            }],
-            title: {
-                text: ''
             }
+        }, function(ret, err) {
+            for (var key in ret){
+              var obj = {
+                  name: key,
+                  weight: ret[key]
+              };
+              retArr.push(obj);
+            }
+            Highcharts.chart('cloud', {
+                series: [{
+                    type: 'wordcloud',
+                    data: retArr,
+                    name: 'Occurrences'
+                }],
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false //右下角的版权信息不显示
+                }
+            });
         });
+
     }
 
     turnYourFace = function() {

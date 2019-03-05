@@ -13,21 +13,28 @@
             background-color: #f0f0f0;
         }
 
-        .space {
+        .space {}
+        /*房间信息*/
+        .hold{
+          height: 15px;
+          background-color: inherit;
         }
 
-        /*房间信息*/
-        .room_info{
-          margin-top: 15px;
-          height: 300px;
-          width: 100%;
-          background-color: #fff;
+        .room_info {
+            height: 300px;
+            width: 100%;
+            background-color: #fff;
         }
 
         .room_info_top {
-          height: 240px;
-          width: 100%;
-          overflow: hidden;
+            height: 240px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .room_info_top img {
+            max-height: 240px;
+            max-width: 100%;
         }
 
         .room_info_buttom {
@@ -53,8 +60,8 @@
             font-size: 12px;
             color: rgb(150, 150, 150);
         }
-
         /*搜索模块*/
+
         .search_bar {
             height: 35px;
             width: 100%;
@@ -104,8 +111,8 @@
             border-bottom: 1px solid rgba(220, 220, 220, 0.3);
             z-index: 101;
         }
-
         /*排序模块，位于搜索模块右侧*/
+
         .sort_type {
             width: 45px;
             height: 35px;
@@ -115,8 +122,8 @@
             border-left: 1px solid rgba(220, 220, 220, 0.3);
             z-index: 102;
         }
-
         /*滑动开关*/
+
         .slide-btn {
             height: 23px;
             width: 72px;
@@ -203,18 +210,18 @@
         </div>
     </div>
     <!-- 隐藏的排序按钮 -->
-    <div class="SortArea" id ="SortArea">
-      <p onclick="changeSortType(0)" class="pp" id = 'Sort0'>时间顺序</p>
-      <p onclick="changeSortType(1)" class="pp" id = 'Sort1'>时间逆序</p>
-      <p onclick="changeSortType(2)" class="pp" id = 'Sort2'>风险顺序</p>
-      <p onclick="changeSortType(3)" class="pp" id = 'Sort3'>风险逆序</p>
+    <div class="SortArea" id="SortArea">
+        <p onclick="changeSortType(0)" class="pp" id='Sort0'>时间顺序</p>
+        <p onclick="changeSortType(1)" class="pp" id='Sort1'>时间逆序</p>
+        <p onclick="changeSortType(2)" class="pp" id='Sort2'>风险顺序</p>
+        <p onclick="changeSortType(3)" class="pp" id='Sort3'>风险逆序</p>
     </div>
 
-    <div class="space" id='flag'></div>
+    <div class="hold" id='flag'></div>
     <!-- 房间信息控件 -->
     <div class="room_info">
         <div class="room_info_top">
-            <img alt="" src="../image/forumPic.png">
+            <img alt="" class='imgType' src="../image/forumPic.png">
         </div>
         <div class="room_info_buttom">
             <div class="innerMid" onclick="openHistory()">
@@ -222,7 +229,7 @@
                 <span class="secondSpan">累计监控时长：10h</span>
             </div>
             <div class="slide-btn">
-                <div class="inner-on" id="inner">
+                <div class="inner-on" id="inner" onclick="changeOpen(inner)">
                     <input style="display:none;" type="checkbox" checked>
                     <span class="space"></span>
                 </div>
@@ -237,6 +244,10 @@
 <script type="text/javascript">
     var token = localStorage.getItem("token");
     apiready = function() {
+        var width = document.documentElement.clientWidth;
+        $('.imgType').css({
+            'width': width
+        });
         getHistoryInfo();
         initSort();
     }
@@ -253,15 +264,15 @@
         });
     }
 
-    changeSortType = function(i){ //排序选项点击事件
-      var SortWays = ['ascend_time','descent_time','ascend_level','descent_level'];
-      var j = (i + 1) % 4;
-      var k = (i + 2) % 4;
-      var l = (i + 3) % 4;
-      $("#Sort" + i).addClass("chosen");
-      $("#Sort" + k).removeClass("chosen");
-      $("#Sort" + j).removeClass("chosen");
-      $("#Sort" + l).removeClass("chosen");
+    changeSortType = function(i) { //排序选项点击事件
+        var SortWays = ['ascend_time', 'descent_time', 'ascend_level', 'descent_level'];
+        var j = (i + 1) % 4;
+        var k = (i + 2) % 4;
+        var l = (i + 3) % 4;
+        $("#Sort" + i).addClass("chosen");
+        $("#Sort" + k).removeClass("chosen");
+        $("#Sort" + j).removeClass("chosen");
+        $("#Sort" + l).removeClass("chosen");
     }
 
     sortBy = function(i) { //打开排序选项框
@@ -277,14 +288,8 @@
                 'authorization': 'JWT ' + token,
                 // "enctype": "multipart/form-data",
                 // 'Connection': 'keep-alive'
-            },
-            // data: {
-            //     values: {
-            //         'short_name': '6040761'
-            //     }
-            // }
+            }
         }, function(ret, err) {
-            alert(JSON.stringify(ret));
             var js = '';
             for (var i in ret.results) {
                 js += createTheTab(ret.results[i].id);
@@ -301,20 +306,23 @@
 
     createTheTab = function(id) {
         var str = '<div class="room_info">' +
-            '<div class="innerLeft">' +
-            '<img src="../image/douyu.jpg">' +
+            '<div class="room_info_top">' +
+            '<img alt="" class="imgType" src="../image/forumPic.png">' +
             '</div>' +
+            '<div class="room_info_buttom">' +
             '<div class="innerMid" onclick="openHistory(' + id + ')">' +
             '<span class="firstSpan">房间号：' + id + '</span>' +
             '<span class="secondSpan">累计监控时长：10h</span>' +
             '</div>' +
-            '<div class="slide-btn">' +
-            '<div class="inner-on" id = "' + id + '" onclick = "changeOpen(' + id + ')">' +
+            '<div class="slide-btn" >' +
+            '<div class="inner-on" id="' + id + '" onclick = "changeOpen(' + id + ')">' +
             '<input style="display:none;" type="checkbox" checked>' +
             '<span class="space"></span>' +
             '</div>' +
             '</div>' +
-            '</div>';
+            '</div>' +
+            '</div>' +
+            '<div class="hold"></div>';
         return str;
     }
 
@@ -322,15 +330,53 @@
     changeOpen = function(id) {
         var Item = document.getElementById(id);
         if (Item.className == "inner-on") {
-            // if (Item.attr("class") == "inner-on") {
+            //界面响应
             Item.style.left = 0 + "px";
             Item.childNodes[1].checked = false;
             Item.className = "inner-off";
-            // Item.addClass('inner-off');
+
+            //进行前后台通讯
+            myAjaxObject = new XMLHttpRequest();
+            var url = 'http://47.98.53.200/danmu/analyse/1/';
+            //【不同之处1】发送的数据另写
+            myAjaxObject.open('DELETE', url, true);
+            // 【不同之处2】post方式一定要加上这句话
+            myAjaxObject.setRequestHeader('authorization', 'JWT ' + token,
+                'enctype', 'multipart/form-data');
+            //回调处理函数指定为 callback();
+            myAjaxObject.onreadystatechange = function() {
+                if (myAjaxObject.readyState != 2 && myAjaxObject.readyState != 3 && myAjaxObject.readyState != 4 && myAjaxObject.status != 200){
+                    Item.style.left = -51 + "px";
+                    Item.childNodes[1].checked = true;
+                    Item.className = "inner-on";
+                }
+            };
+            var json = {};
+            json.roomId = id;
+            myAjaxObject.send(json);
         } else {
             Item.style.left = -51 + "px";
             Item.childNodes[1].checked = true;
             Item.className = "inner-on";
+
+            myAjaxObject = new XMLHttpRequest();
+            var url = 'http://47.98.53.200/danmu/analyse/1/';
+            //【不同之处1】发送的数据另写
+            myAjaxObject.open('PUT', url, true);
+            // 【不同之处2】post方式一定要加上这句话
+            myAjaxObject.setRequestHeader('authorization', 'JWT ' + token,
+                'enctype', 'multipart/form-data');
+            //回调处理函数指定为 callback();
+            myAjaxObject.onreadystatechange = function() {
+                if (myAjaxObject.readyState != 2 && myAjaxObject.readyState != 3 && myAjaxObject.readyState != 4 && myAjaxObject.status != 200){
+                    Item.style.left = 0 + "px";
+                    Item.childNodes[1].checked = false;
+                    Item.className = "inner-off";
+                }
+            };
+            var json = {};
+            json.roomId = id;
+            myAjaxObject.send(json);
         }
     }
 
@@ -407,8 +453,6 @@
         });
 
     }
-
-
 </script>
 
 </html>
