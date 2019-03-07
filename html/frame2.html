@@ -120,7 +120,19 @@
           padding-left: 5px;
         }
 
-        .moreinfo_level span{
+        .moreinfo_level .level_Low{
+          color: #00FF00;
+        }
+
+        .moreinfo_level .level_Mid{
+          color: #FF8C00;
+        }
+
+        .moreinfo_level .level_High{
+          color: #FF00FF;
+        }
+
+        .moreinfo_level .level_Serious{
           color: #f00;
         }
     </style>
@@ -133,24 +145,62 @@
             <input type="text" id ='sText' class="search_text" placeholder="搜索" onchange="search()">
         </form>
     </div>
-    <div class="space"></div>
+    <div class="space" id="flag"></div>
+
     <div class="room_info">
         <div class="innerLeft">
             <img src="../image/douyu.jpg">
         </div>
         <div class="innerMid" onclick="openHistory()">
             <span class="firstSpan">房间号：9532614</span>
-            <span class="secondSpan">当日预警次数：22</span>
-        </div>
-        <div class="right-btn" onclick="showMore()">
-            <img src = '../image/douyu.jpg'>
+            <span class="secondSpan">数据由鹰眼提供</span>
         </div>
     </div>
     <div class="room_moreinfo">
-        <div><p class="moreinfo_level">建议处理优先级：<span>极高</span></p></div>
-        <p class='room_moreinfo_text'>近一周预警次数：22</p>
-        <p class='room_moreinfo_text'>近十天预警次数：32</p>
-        <p class='room_moreinfo_text'>监控以来总次数：50</p>
+        <div><p class="moreinfo_level">建议处理优先级：<span class="level_Serious">极高</span></p></div>
+        <p class='room_moreinfo_text'>近期预警次数：22</p>
+    </div>
+
+    <div class="room_info">
+        <div class="innerLeft">
+            <img src="../image/douyu.jpg">
+        </div>
+        <div class="innerMid" onclick="openHistory()">
+            <span class="firstSpan">房间号：9532614</span>
+            <span class="secondSpan">数据由鹰眼提供</span>
+        </div>
+    </div>
+    <div class="room_moreinfo">
+        <div><p class="moreinfo_level">建议处理优先级：<span class="level_Low">低</span></p></div>
+        <p class='room_moreinfo_text'>近期预警次数：22</p>
+    </div>
+
+    <div class="room_info">
+        <div class="innerLeft">
+            <img src="../image/douyu.jpg">
+        </div>
+        <div class="innerMid" onclick="openHistory()">
+            <span class="firstSpan">房间号：9532614</span>
+            <span class="secondSpan">数据由鹰眼提供</span>
+        </div>
+    </div>
+    <div class="room_moreinfo">
+        <div><p class="moreinfo_level">建议处理优先级：<span class="level_Mid">中</span></p></div>
+        <p class='room_moreinfo_text'>近期预警次数：22</p>
+    </div>
+
+    <div class="room_info">
+        <div class="innerLeft">
+            <img src="../image/douyu.jpg">
+        </div>
+        <div class="innerMid" onclick="openHistory()">
+            <span class="firstSpan">房间号：9532614</span>
+            <span class="secondSpan">数据由鹰眼提供</span>
+        </div>
+    </div>
+    <div class="room_moreinfo">
+        <div><p class="moreinfo_level">建议处理优先级：<span class="level_High">高</span></p></div>
+        <p class='room_moreinfo_text'>近期预警次数：22</p>
     </div>
 </body>
 
@@ -171,12 +221,48 @@
       },function(ret, err){
           if (ret) {
               alert( JSON.stringify( ret ) );
+              initEmerHistory(ret);
           } else {
               alert( JSON.stringify( err ) );
           }
       });
+    }
 
+    initEmerHistory = function(ret){
+      var insStr = '';
+      for (var i in ret){
+        insStr+='<div class="room_info">'+
+            '<div class="innerLeft">'+
+                '<img src="../image/douyu.jpg">'+
+            '</div>'+
+            '<div class="innerMid" onclick="openHistory()">'+
+                '<span class="firstSpan">房间号'+ ret[i][0] +'</span>'+
+                '<span class="secondSpan">数据由鹰眼提供</span>'+
+            '</div>'+
+        '</div>'
+        if (ret[i][1] < 10){
+          insStr+= '<div class="room_moreinfo">'+
+              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Low">低</span></p></div>'+
+              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
+          '</div>'
+        }else if (ret[i][1] > 10 && ret[i][1] < 20) {
+          insStr+= '<div class="room_moreinfo">'+
+              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Mid">中</span></p></div>'+
+              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
+          '</div>'
+        }else if (ret[i][1] > 20 && ret[i][1] < 50) {
+          insStr+= '<div class="room_moreinfo">'+
+              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_High">较高</span></p></div>'+
+              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
+          '</div>'
+        }else {
+          insStr+= '<div class="room_moreinfo">'+
+              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Serious">极高</span></p></div>'+
+              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
+          '</div>'
+        }
 
+      }
     }
 
     search = function(){

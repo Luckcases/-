@@ -290,6 +290,7 @@
                 // 'Connection': 'keep-alive'
             }
         }, function(ret, err) {
+            alert(JSON.stringify(ret));
             var js = '';
             for (var i in ret.results) {
                 js += createTheTab(ret.results[i].id);
@@ -297,7 +298,7 @@
             $('div').remove('.room_info');
             $("#flag").after(js);
             for (var n in ret.results) {
-                if (ret.results[n].is_supervising == false) {
+                if (ret.results[n].is_supervising==false) {
                     changeOpen(ret.results[n].id);
                 }
             }
@@ -315,7 +316,7 @@
             '<span class="secondSpan">累计监控时长：10h</span>' +
             '</div>' +
             '<div class="slide-btn" >' +
-            '<div class="inner-on" id="' + id + '" onclick = "changeOpen(' + id + ')">' +
+            '<div class="inner-on" id="' + id + '" onclick = "changeStatus(' + id + ')">' +
             '<input style="display:none;" type="checkbox" checked>' +
             '<span class="space"></span>' +
             '</div>' +
@@ -327,56 +328,65 @@
     }
 
     // 房间打开或关闭的状态改变
+    changeStatus = function(id){
+      var Item = document.getElementById(id);
+      if (Item.className == "inner-on") {
+          //进行前后台通讯
+          myAjaxObject = new XMLHttpRequest();
+          var url = 'http://47.98.53.200/danmu/analyse/';
+          //【不同之处1】发送的数据另写
+          myAjaxObject.open('DELETE', url, true);
+          // 【不同之处2】post方式一定要加上这句话
+          myAjaxObject.setRequestHeader('authorization', 'JWT ' + token,
+              'enctype', 'multipart/form-data');
+          //回调处理函数指定为 callback();
+          myAjaxObject.onreadystatechange = function() {
+            // alert(myAjaxObject.responseText);
+              if (myAjaxObject.status = 200){
+                  changeOpen(id);
+              }
+          };
+          var json = {};
+          json.roomId = id;
+          myAjaxObject.send(json);
+      } else {
+        api.ajax({
+            url: 'http://47.98.53.200:5000/danmu/analyse/',
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'authorization': 'JWT ' + token,
+                "enctype": "multipart/form-data",
+                // 'Connection': 'keep-alive'
+            },
+            data: {
+                body: {
+                    'roomId': id,
+                }
+            }
+        }, function(ret, err) {
+            if (err) {
+                if(err.body){
+                  alert('打开成功');
+                }
+                changeOpen(id);
+            } else {
+                alert(JSON.stringify(ret));
+            }
+        });
+      }
+    }
+// 界面响应
     changeOpen = function(id) {
         var Item = document.getElementById(id);
         if (Item.className == "inner-on") {
-            //界面响应
             Item.style.left = 0 + "px";
             Item.childNodes[1].checked = false;
             Item.className = "inner-off";
-
-            //进行前后台通讯
-            myAjaxObject = new XMLHttpRequest();
-            var url = 'http://47.98.53.200/danmu/analyse/1/';
-            //【不同之处1】发送的数据另写
-            myAjaxObject.open('DELETE', url, true);
-            // 【不同之处2】post方式一定要加上这句话
-            myAjaxObject.setRequestHeader('authorization', 'JWT ' + token,
-                'enctype', 'multipart/form-data');
-            //回调处理函数指定为 callback();
-            myAjaxObject.onreadystatechange = function() {
-                if (myAjaxObject.readyState != 2 && myAjaxObject.readyState != 3 && myAjaxObject.readyState != 4 && myAjaxObject.status != 200){
-                    Item.style.left = -51 + "px";
-                    Item.childNodes[1].checked = true;
-                    Item.className = "inner-on";
-                }
-            };
-            var json = {};
-            json.roomId = id;
-            myAjaxObject.send(json);
         } else {
             Item.style.left = -51 + "px";
             Item.childNodes[1].checked = true;
             Item.className = "inner-on";
-
-            myAjaxObject = new XMLHttpRequest();
-            var url = 'http://47.98.53.200/danmu/analyse/1/';
-            //【不同之处1】发送的数据另写
-            myAjaxObject.open('PUT', url, true);
-            // 【不同之处2】post方式一定要加上这句话
-            myAjaxObject.setRequestHeader('authorization', 'JWT ' + token,
-                'enctype', 'multipart/form-data');
-            //回调处理函数指定为 callback();
-            myAjaxObject.onreadystatechange = function() {
-                if (myAjaxObject.readyState != 2 && myAjaxObject.readyState != 3 && myAjaxObject.readyState != 4 && myAjaxObject.status != 200){
-                    Item.style.left = 0 + "px";
-                    Item.childNodes[1].checked = false;
-                    Item.className = "inner-off";
-                }
-            };
-            var json = {};
-            json.roomId = id;
-            myAjaxObject.send(json);
         }
     }
 

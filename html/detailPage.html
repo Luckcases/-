@@ -94,7 +94,7 @@
         }
 
         .opRoom {
-            height: 300px;
+            height: 35px;
         }
 
         .baseInfo {
@@ -190,20 +190,21 @@
     var Rid = localStorage.getItem('Rid');
     apiready = function() {
         init();
+        alert(Rid);
     };
 
-    requstforLong = function(chart) {
+    requstforLong = function(chart) { //完成图表的饼状图
         var result = [];
         var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("POST", "http://47.98.53.200:5000/danmu/analyse/2/", true);
-        xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=utf-8', 'authorization', 'JWT ' + token, 'enctype', 'multipart/form-data');//设置头部
+        xmlhttp.open("POST", "http://47.98.53.200:5000/danmu/analyse/", true);
+        xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=utf-8', 'authorization', 'JWT ' + token, 'enctype', 'multipart/form-data'); //设置头部
         var json = {};
         json.roomId = Rid;
-        xmlhttp.onreadystatechange = function(e) {//接受请求的函数，服务器每返回一次数据都会响应
+        xmlhttp.onreadystatechange = function(e) { //接受请求的函数，服务器每返回一次数据都会响应
             if (xmlhttp.readyState == 2) {
                 console.log('已收到服务器响应的标头');
             } else if (xmlhttp.readyState == 3) {
-                result = xmlhttp.responseText.split(',');//将服务器返回的字符串变为数组
+                result = xmlhttp.responseText.split(','); //将服务器返回的字符串变为数组
                 chart.addPoint([(new Date()).getTime(), parseInt(result[result.length - 2])], true, true);
                 console.log(result);
             } else if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -211,11 +212,11 @@
                 console.log(xmlhttp.responseText);
             }
         };
-        xmlhttp.send(JSON.stringify(json));//发送请求
+        xmlhttp.send(JSON.stringify(json)); //发送请求
     }
 
     init = function() {
-        $('#roomIdcon').html('房间号'+Rid);
+        $('#roomIdcon').html('房间号' + Rid);
         createPie();
         createChart();
     }
@@ -241,7 +242,7 @@
                 },
                 title: {
                     floating: true,
-                    text: '弹幕情况', //环形图中心显示文字加图片
+                    text: Rid, //环形图中心显示文字加图片
                     useHTML: true, //必须设置true才能加图片
                 },
                 tooltip: {
@@ -293,23 +294,23 @@
     }
 
     createChart = function() {
-      var chart = {
-          type: 'spline',
-          animation: Highcharts.svg, // don't animate in IE < IE 10.
-          marginRight: 10,
-          events: {
-              load: function() {
-                  var series = this.series[0];
-                  setInterval(requstforLong(series), 1000);
-              }
-          }
-      };
+        var chart = {
+            type: 'spline',
+            animation: Highcharts.svg, // don't animate in IE < IE 10.
+            marginRight: 10,
+            events: {
+                load: function() {
+                    var series = this.series[0];
+                    setInterval(requstforLong(series), 1000);
+                }
+            }
+        };
 
         var title = {
             text: ''
         };
         var subtitle = {
-            text: '房间：1564854'
+            text: '房间：' + Rid
         };
         var xAxis = {
             type: 'datetime',
@@ -321,7 +322,7 @@
             },
             plotBands: [{ // Light air
                 from: 0,
-                to: 1,
+                to: 100,
                 color: 'rgba(0, 255, 127, 0.1)',
                 label: {
                     text: '积极',
@@ -330,7 +331,7 @@
                     }
                 }
             }, { // Light breeze
-                from: -1,
+                from: -100,
                 to: 0,
                 color: 'rgba(220, 20, 60, 0.1)',
                 label: {

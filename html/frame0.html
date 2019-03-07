@@ -14,6 +14,10 @@
         }
         /*搜索模块*/
 
+        .content {
+            min-height: calc(100vh - 190px);
+        }
+
         .search_bar {
             height: 35px;
             width: 100%;
@@ -74,44 +78,73 @@
             border-left: 1px solid rgba(220, 220, 220, 0.3);
             z-index: 102;
         }
-        /*房间信息标签*/
-        .hold{
-          height: 15px;
-          background-color: inherit;
-        }
+        /*上部信息显示和折线图容器*/
 
-        .room_info {
-            width: 100%;
+        .topContent {
+            margin-top: 50px;
             height: 300px;
-            background: #fff;
-            z-index: 1;
-        }
-        /*房间信息标签下部信息条*/
-
-        .room_textinfo {
-            height: 45px;
             width: 100%;
-            float: left;
-            position: absolute;
-            border-top: 1px solid #dddddd;
+            background: #fff;
+        }
+        /*折线图容器*/
+
+        .cavContainer {
+            height: 250px;
+        }
+        /*下部简略信息按钮*/
+
+        .topUnderOp {
+            border-top: 1px #dddddd solid;
+            height: 45px;
+            overflow: hidden
         }
 
-        .room_textinfo span {
-            position: absolute;
-            width: auto;
-            height: 45px;
+        .topUnderOp span {
             line-height: 45px;
-            font-size: 16px;
         }
 
-        .room_textinfo img {
-            position: absolute;
-            width: 45px;
-            height: 45px;
+        .OpLeft {
+            float: left;
         }
 
-        .info_text {
-            display: block;
+        .OpRight {
+            float: right;
+        }
+        /*房间信息标签*/
+
+        .slide-box {
+            margin-top: 10px;
+            display: -webkit-box;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+            height: 170px;
+        }
+
+        .slide-item {
+            width: 200px;
+            height: 150px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            margin-right: 30px;
+            background-image: url('../image/douyu.jpg');
+            background-position: center;
+            background-size: 200px 150px;
+            background-repeat: no-repeat;
+            background-clip: border-box;
+            background-attachment: fixed;
+        }
+
+        .bottomContent {
+            height: 25px;
+            margin-top: 125px;
+            background: #000;
+            opacity: 0.5;
+        }
+
+        .bottomContent span {
+            color: #fff;
+            line-height: 25px;
+            height: 25px;
         }
         /*移动按钮*/
 
@@ -123,32 +156,22 @@
             border: 1px #fff solid;
             border-radius: 40px;
         }
-        /*折线图容器*/
-
-        .canvCont {
-            width: auto;
-            height: 250px;
-            z-index: 1;
-        }
         /*排序选择按钮容器*/
 
         .SortArea {
             display: none;
             width: 100px;
-            height: 148px;
+            height: 75px;
             position: fixed;
             background-color: #f0f0f0;
             z-index: 102;
             border-top: 1px solid #dddddd;
-            /*border-left: 1px solid #dddddd;
-          border-right: 1px solid #dddddd;*/
         }
 
         .SortArea .pp {
             width: 100%;
             height: 37px;
             line-height: 37px;
-            /*border-top: 1px solid #dddddd;*/
             text-align: center;
         }
 
@@ -159,56 +182,47 @@
 </head>
 
 <body>
-    <!-- 上部搜索条和排序 -->
-    <div class="search_bar" id="">
-        <div class="search_parent">
-            <input type="button" id='search_btn' class="search_btn">
-            <input type="text" class="search_text" placeholder="搜索" id='search_text' onchange="searchBy()">
-            <input type="text" class="sort_type" id="sort_type" readonly="readonly" onclick="sortBy()">
+    <div class="content">
+        <!-- 上部搜索条和排序 -->
+        <div class="search_bar" id="">
+            <div class="search_parent">
+                <input type="button" id='search_btn' class="search_btn">
+                <input type="text" class="search_text" placeholder="搜索" id='search_text' onchange="searchBy()">
+                <input type="text" class="sort_type" id="sort_type" readonly="readonly" onclick="sortBy()">
+            </div>
         </div>
+
+        <!-- 隐藏的管理按钮 -->
+        <div class="SortArea" id="SortArea">
+            <p onclick="Manage(0)" class="pp" id='Sort0'>添加</p>
+            <p onclick="Manage(1)" class="pp" id='Sort1'>删除</p>
+        </div>
+
+        <!-- 房间信息展示列表项 -->
+
+        <div class="topContent">
+            <div class="cavContainer" id='cavContainer'>
+            </div>
+            <div class="topUnderOp" onclick="openDetail()">
+                <span class="OpLeft" id='OpLeft'>近期积极比例：57%</span><span class="OpRight">点击查看详情</span>
+            </div>
+        </div>
+
     </div>
 
-    <!-- 隐藏的排序按钮 -->
-    <div class="SortArea" id="SortArea">
-        <p onclick="changeSortType(0)" class="pp" id='Sort0'>风险顺序</p>
-        <p onclick="changeSortType(1)" class="pp" id='Sort1'>风险逆序</p>
-        <p onclick="changeSortType(2)" class="pp" id='Sort2'>时间顺序</p>
-        <p onclick="changeSortType(3)" class="pp" id='Sort3'>时间逆序</p>
+    <div class="slide-box">
+        <div id='flag'></div>
+        <div class="slide-item" onclick="changeShow(156235)">
+            <div class="bottomContent">
+                <span>房间号156235<span>
+          </div>
+        </div>
+        <div class="slide-item"></div>
+        <div class="slide-item"></div>
+        <div class="slide-item"></div>
+        <div class="slide-item"></div>
     </div>
 
-    <!-- 房间信息展示列表项 -->
-    <div class="hold" id="flag"></div>
-    <div class="room_info">
-        <div class="canvCont" id="">
-        </div>
-        <div class="room_textinfo" onclick="openDetail()">
-            <span>房间号1562565</span><img src='../image/go.png' id='gotoImg'>
-        </div>
-    </div>
-<div class = "hold"></div>
-    <div class="room_info">
-        <div class="canvCont" id="">
-        </div>
-        <div class="room_textinfo" onclick="openDetail()">
-            <span>房间号1562565</span><img src='../image/go.png' id='gotoImg'>
-        </div>
-    </div>
-<div class = "hold"></div>
-    <div class="room_info">
-        <div class="canvCont" id="">
-        </div>
-        <div class="room_textinfo" onclick="openDetail()">
-            <span>房间号1562565</span><img src='../image/go.png' id='gotoImg'>
-        </div>
-    </div>
-<div class = "hold"></div>
-    <div class="room_info">
-        <div class="canvCont" id="">
-        </div>
-        <div class="room_textinfo" onclick="openDetail()">
-            <span>房间号1562565</span><img src='../image/go.png' id='gotoImg'>
-        </div>
-    </div>
 
 </body>
 
@@ -219,14 +233,11 @@
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
     var token = localStorage.getItem('token');
+    var xmlhttp = new XMLHttpRequest();
+    var Rid;
     apiready = function() {
         initSort();
-        changeSortType(1);
-        var toleft = document.documentElement.clientWidth - 46;
-        // $('#gotoImg').css({
-        //     "margin-left": toleft,
-        //     "margin-top": '1px'
-        // });
+        initSlide();
     }
 
     initSort = function() { //在页面加载时初始化与排序有关的组件
@@ -234,78 +245,76 @@
         $('#sort_type').css({
             "margin-left": toleft
         });
-        $api.byId('sort_type').value = '排序';
+        $api.byId('sort_type').value = '管理';
         toleft = document.documentElement.clientWidth - 100;
         $('#SortArea').css({
             "margin-left": toleft
         });
     }
 
-    changeSortType = function(i) { //排序选项点击事件
-        var SortWays = ['ascend_time', 'descent_time', 'ascend_level', 'descent_level'];
-        var j = (i + 1) % 4;
-        var k = (i + 2) % 4;
-        var l = (i + 3) % 4;
-        $("#Sort" + i).addClass("chosen");
-        $("#Sort" + k).removeClass("chosen");
-        $("#Sort" + j).removeClass("chosen");
-        $("#Sort" + l).removeClass("chosen");
-        var type = parseInt(i / 2);
-        api.ajax({ //请求信息
-            url: 'http://47.98.53.200:5000/danmu/analyse/' + type + '/',
-            method: 'get',
-            headers: {
-                //'Content-Type': 'application/json;charset=utf-8',
-                'authorization': 'JWT ' + token,
-                //"enctype": "multipart/form-data",
-                // 'Connection': 'keep-alive'
-            },
-            // data: {
-            //     values: {
-            //         'short_name': '6040761'
-            //     }
-            // }
-        }, function(ret, err) {
-            if (err) {
-                alert(JSON.stringify(err));
-            } else {
-                if (i % 2 == 0) {
-                    initList(ret, true);
-                } else {
-                    initList(ret, false);
-                }
+    initSlide = function(){
+      api.ajax({ //请求信息
+          url: 'http://47.98.53.200:5000/danmu/analyse/',
+          method: 'get',
+          headers: {
+              //'Content-Type': 'application/json;charset=utf-8',
+              'authorization': 'JWT ' + token,
+              //"enctype": "multipart/form-data",
+              // 'Connection': 'keep-alive'
+          },
+
+      }, function(ret, err) {
+          if (err) {
+              alert(JSON.stringify(err));
+          } else {
+            alert(JSON.stringify(ret));
+            if (ret.count != 0){
+              initList(ret);
             }
-        });
+          }
+      });
+    }
+
+    changeShow = function(id){
+      Rid = id;
+      dynPic(id);
+    }
+
+    Manage = function(i) { //管理选项点击事件
+        var j = (i + 1) % 2;
+        $("#Sort" + i).addClass("chosen");
+        $("#Sort" + j).removeClass("chosen");
+        if (i == 0){
+          openAddPage();
+        }else{
+
+        }
     }
 
     sortBy = function(i) { //打开排序选项框
         $("#SortArea").slideToggle(500);
     }
 
-    initList = function(ret, isTurn) { //根据服务器返回数据建立列表
-        if (!isTurn) {
-            ret.results = Turn(ret.results);
-        }
+    initList = function(ret) { //根据服务器返回数据建立列表
         var addStr = '';
+        changeShow(ret.results[0].id);
         for (var i in ret.results) {
-            addStr += '<div class="room_info">' +
-                '<div class="canvCont" id="' + ret.results[i].id + '">' +
-                '</div>' +
-                '<div class="room_textinfo" onclick="openDetail(' + ret.results[i].id + ')">' +
-                '<span>房间号' + ret.results[i].id + '</span><img src = "../image/go.png"  class="gotoImg">' +
-                '</div>'+
-                '</div>'+
-                '<div class = "hold"></div>';
+            addStr +=
+                '<div class="slide-item" id = "' + ret.results[i].id + '" onclick="changeShow(' + ret.results[i].id + ')">'+
+                  '<div class="bottomContent">'+
+                    '<span>房间号' + ret.results[i].id + '<span>'+
+                  '</div>'+
+                '</div>'
         }
-        $('div').remove(".room_info")
+        $('div').remove(".slide-item")
         $("#flag").after(addStr);
-        var toleft = document.documentElement.clientWidth - 45 - 1;
-        $('.gotoImg').css({
-            "margin-left": toleft
-        });
-        // for (var i in ret.results) {
-        //     dynPic(ret.results[i].id);
-        // }
+        for (var i in ret.results) {
+          if (ret.results[i].img != null){
+            $('#' + ret.results[i].id).css({
+              "background-image": "url('../image/douyu.jpg')"
+            });
+          }
+        }
     }
 
     searchBy = function() { //搜索响应事件
@@ -358,7 +367,7 @@
         apiready();
     }
 
-    openDetail = function(Rid) {
+    openDetail = function() {
         localStorage.setItem('Rid', Rid);
         api.openWin({
             name: 'detailPage',
@@ -369,7 +378,7 @@
         });
     }
 
-    openAddPage = function(Rid) {
+    openAddPage = function() {
         api.openWin({
             name: 'addNew',
             url: './addNew.html',
@@ -379,37 +388,26 @@
         });
     }
 
-    creatBut = function() { //创建一个可拖拽的悬浮按钮
-        var screenHeight = document.documentElement.clientHeight;
-        var fdiv = document.getElementById("info-nr");
-        fdiv.addEventListener('ontouchstart', function(event) {
-            onBut = 1;
-        }, false);
-        fdiv.addEventListener('touchmove', function(event) {
-            // 如果这个元素的位置内只有一个手指的话
-            onBut = 1;
-            if (event.targetTouches.length == 1) {
-                event.preventDefault(); // 阻止浏览器默认事件，重要
-                var touch = event.targetTouches[0];
-                if ((touch.pageY) <= 70) { //超过顶部
-                    fdiv.style.top = "70px";
-                } else if (touch.pageY > (screenHeight - parseInt(fdiv.clientHeight))) { //超过底部
-                    fdiv.style.top = (screenHeight - parseInt(fdiv.clientHeight)) - 70 + "px";
-                } else {
-                    fdiv.style.top = (touch.pageY - parseInt(fdiv.clientHeight) / 2) + "px";
-                }
-                if ((touch.pageX) <= 60) { //超过顶部
-                    fdiv.style.right = api.winWidth - 70 + "px";
-                } else if (touch.pageX > (api.winWidth - 3)) { //超过底部
-                    fdiv.style.right = 3 + "px";
-                } else {
-                    fdiv.style.right = (api.winWidth - touch.pageX) + "px";
-                }
+    requstforLong = function(chart) { //请求长连接
+        var result = [];
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("POST", "http://47.98.53.200:5000/danmu/analyse/", true);
+        xmlhttp.setRequestHeader('Content-Type', 'application/json;charset=utf-8', 'authorization', 'JWT ' + token, 'enctype', 'multipart/form-data'); //设置头部
+        var json = {};
+        json.roomId = Rid;
+        xmlhttp.onreadystatechange = function(e) { //接受请求的函数，服务器每返回一次数据都会响应
+            if (xmlhttp.readyState == 2) {
+                console.log('已收到服务器响应的标头');
+            } else if (xmlhttp.readyState == 3) {
+                result = xmlhttp.responseText.split(','); //将服务器返回的字符串变为数组
+                chart.addPoint([(new Date()).getTime(), parseInt(result[result.length - 2])], true, true);
+                console.log(result);
+            } else if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                console.log('服务器响应完毕!!');
+                console.log(xmlhttp.responseText);
             }
-        }, false);
-        fdiv.addEventListener('ontouchend', function(event) {
-            onBut = 0;
-        }, false)
+        };
+        xmlhttp.send(JSON.stringify(json)); //发送请求
     }
 
     dynPic = function(id) { //生成动态折线图
@@ -418,15 +416,10 @@
             animation: Highcharts.svg, // don't animate in IE < IE 10.
             marginRight: 10,
             events: {
-                load: function() {
-                    // set up the updating of the chart each second
-                    var series = this.series[0];
-                    setInterval(function() {
-                        var x = (new Date()).getTime(), // current time
-                            y = Math.random();
-                        series.addPoint([x, y], true, true);
-                    }, 1000);
-                }
+              load: function() {
+                  var series = this.series[0];
+                  requstforLong(series);
+              }
             }
         };
         var title = {
@@ -484,7 +477,7 @@
                 var data = [],
                     time = (new Date()).getTime(),
                     i;
-                for (i = -19; i <= 0; i += 1) {
+                for (i = -99; i <= 0; i += 1) {
                     data.push({
                         x: time + i * 1000,
                         y: Math.random()
@@ -512,10 +505,38 @@
                 useUTC: false
             }
         });
-        $('#' + id).highcharts(json);
+        $('#cavContainer').highcharts(json);
 
     }
 
+    addInitEvent = function(){
+      window.addEventListener('touchstart', function(event) {
+        var touch = event.targetTouches[0];
+        // 把元素放在手指所在的位置
+        touchStart = touch.pageY;
+        console.log(touchStart);
+    }, false);
+    window.addEventListener('touchmove', function(event) {
+        var touch = event.targetTouches[0];
+        console.log(touch.pageY + 'px');
+        scroll.style.top = scroll.offsetTop + touch.pageY-touchStart + 'px';
+        console.log(scroll.style.top);
+        touchStart = touch.pageY;
+        touchDis = touch.pageY-touchStart;
+    }, false);
+    window.addEventListener('touchend', function(event) {
+        touchStart = 0;
+        var top = scroll.offsetTop;
+        console.log(top);
+        if(top>70)apiready();
+        if(top>0){
+            var time = setInterval(function(){
+                scroll.style.top = scroll.offsetTop -2+'px';
+                if(scroll.offsetTop<=0)clearInterval(time);
+            },1)
+        }
+    }, false);
+  }
     //倒序函数
     Turn = function(arr) {
         var temp = [];

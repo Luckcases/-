@@ -130,7 +130,7 @@
         roomId = $api.byId('Rid').value;
         var token = localStorage.getItem('token');
         api.ajax({
-            url: 'http://47.98.53.200:5000/danmu/analyse/1/',
+            url: 'http://47.98.53.200:5000/danmu/analyse/',
             method: 'put',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
@@ -145,7 +145,9 @@
             }
         }, function(ret, err) {
             if (err) {
-                alert(JSON.stringify(err));
+                if(err.body){
+                  alert('添加成功');
+                }
             } else {
                 alert(JSON.stringify(ret));
             }

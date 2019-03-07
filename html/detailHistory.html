@@ -63,7 +63,7 @@
             background-color: rgb(250, 250, 250);
             position: fixed;
             z-index: 99;
-            display: none;
+            /*display: none;*/
         }
 
         .leftPanel .pinleft {
@@ -101,6 +101,27 @@
 
         .Datebut-choosen {
             background-color: rgb(180, 180, 180);
+        }
+
+        .pinright .DateArea {
+            width: 100%;
+            height: 150px;
+            margin-top: 15px;
+            padding-top: 63px;
+            padding-left: 10px;
+            border-top: 1px solid #dddddd;
+        }
+
+        .DateArea input {
+            height: 25px;
+            font-size: 18px;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+        }
+
+        .DateArea p {
+            height: 25px;
+            line-height: 25px;
         }
 
         .pinleft-but {
@@ -261,6 +282,12 @@
             <div class='Datebut' onclick="chooseTime(0)" id='Dbut0'><span>近一周</span></div>
             <div class='Datebut' onclick="chooseTime(1)" id='Dbut1'><span>近十日</span></div>
             <div class='Datebut' onclick="chooseTime(2)" id='Dbut2'><span>近一月</span></div>
+            <div class='DateArea'>
+                <input type="date" value="2015-09-24" />
+                <p>至</p>
+                <input type="date" value="2015-09-24" />
+            </div>
+            <div class='Datebut' onclick="chooseTime(3)" id='Dbut3'><span>确定</span></div>
         </div>
         <div class="pinright" id='panelR1'>
             <div class='Datebut' onclick="chooseSort(0)" id='Sbut0'><span>时间顺序</span></div>
@@ -331,11 +358,15 @@
     }
 
     chooseTime = function(i) {
-        j = (i + 1) % 3;
-        k = (i + 2) % 3;
-        $("#Dbut" + i).addClass("Datebut-choosen");
-        $("#Dbut" + k).removeClass("Datebut-choosen");
-        $("#Dbut" + j).removeClass("Datebut-choosen");
+        if (i != 3) {
+            j = (i + 1) % 3;
+            k = (i + 2) % 3;
+            $("#Dbut" + i).addClass("Datebut-choosen");
+            $("#Dbut" + k).removeClass("Datebut-choosen");
+            $("#Dbut" + j).removeClass("Datebut-choosen");
+        }else{
+          
+        }
     }
 
     chooseSort = function(i) {
@@ -518,12 +549,12 @@
                 }
             }
         }, function(ret, err) {
-            for (var key in ret){
-              var obj = {
-                  name: key,
-                  weight: ret[key]
-              };
-              retArr.push(obj);
+            for (var key in ret) {
+                var obj = {
+                    name: key,
+                    weight: ret[key]
+                };
+                retArr.push(obj);
             }
             Highcharts.chart('cloud', {
                 series: [{
