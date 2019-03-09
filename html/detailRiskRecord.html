@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+      body {
+          background-color: #6c6c6c;
+          min-height: 100%;
+      }
+      /*头部*/
+
+      .titlebar {
+          position: fixed;
+          background-color: inherit;
+          width: 100%;
+          height: 50px;
+          margin-top: -50px;
+          z-index: 101;
+      }
+
+      .egret-img {
+          position: fixed;
+      }
+
+      .egret-img img {
+          height: 30px;
+          padding: 10px;
+          vertical-align: top;
+      }
+
+      .egret-header-text {
+          position: fixed;
+          line-height: 50px;
+          color: #fff;
+          font-size: 16px;
+          padding: 0 10px;
+      }
+
+      .egret-header-title {
+          position: fixed;
+          position: absolute;
+          width: 100%;
+          text-align: center;
+          line-height: 50px;
+          color: #fff;
+          font-size: 20px;
+      }
+      </style>
+
+  </head>
+  <body>
+    <div class="titlebar">
+        <div class="egret-header topbar">
+            <div class="egret-header-title">房间详情</div>
+            <div class="egret-img"><img src="../image/cm2_icn_back.png" alt="" onclick="goback()"></div>
+        </div>
+    </div>
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript">
+      apiready = function(){
+
+      };
+  </script>
+  </html>

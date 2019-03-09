@@ -12,31 +12,36 @@
             min-height: 100%;
         }
         /*头部*/
-
+        
         .titlebar {
+            position: fixed;
             background-color: inherit;
+            width: 100%;
             height: 50px;
-            position: relative;
+            margin-top: -50px;
+            z-index: 101;
         }
-
+        
         .egret-img {
-            position: absolute;
+            position: fixed;
         }
-
+        
         .egret-img img {
             height: 30px;
             padding: 10px;
             vertical-align: top;
         }
-
+        
         .egret-header-text {
+            position: fixed;
             line-height: 50px;
             color: #fff;
             font-size: 16px;
             padding: 0 10px;
         }
-
+        
         .egret-header-title {
+            position: fixed;
             position: absolute;
             width: 100%;
             text-align: center;
@@ -44,18 +49,8 @@
             color: #fff;
             font-size: 20px;
         }
-
-        .re-item {
-            width: 220px;
-            margin: 50px auto;
-            height: 276px;
-            cursor: pointer;
-            position: relative;
-            perspective: 500;
-            -webkit-perspective: 500;
-        }
         /*左侧隐藏的筛选页面*/
-
+        
         .leftPanel {
             /*padding-top:;*/
             height: 100%;
@@ -63,9 +58,9 @@
             background-color: rgb(250, 250, 250);
             position: fixed;
             z-index: 99;
-            /*display: none;*/
+            display: none;
         }
-
+        
         .leftPanel .pinleft {
             display: inline-block;
             float: left;
@@ -73,18 +68,18 @@
             width: 25%;
             border-right: 1px rgba(200, 200, 200, 0.5) solid;
         }
-
+        
         .leftPanel .pinright {
             display: inline-block;
             float: left;
             height: 100%;
             width: 74%;
         }
-
+        
         .leftPanel .pinright-hidden {
             display: none;
         }
-
+        
         .pinright .Datebut {
             width: 90px;
             height: 25px;
@@ -94,15 +89,15 @@
             margin-top: 10px;
             margin-left: 5px;
         }
-
+        
         .Datebut span {
             line-height: 25px;
         }
-
+        
         .Datebut-choosen {
             background-color: rgb(180, 180, 180);
         }
-
+        
         .pinright .DateArea {
             width: 100%;
             height: 150px;
@@ -111,51 +106,52 @@
             padding-left: 10px;
             border-top: 1px solid #dddddd;
         }
-
+        
         .DateArea input {
             height: 25px;
             font-size: 18px;
             border: 1px solid #dddddd;
             border-radius: 8px;
         }
-
+        
         .DateArea p {
             height: 25px;
             line-height: 25px;
         }
-
+        
         .pinleft-but {
             width: 100%;
             height: 45px;
             text-align: center;
             border-bottom: 1px rgba(200, 200, 200, 0.5) solid;
         }
-
+        
         .pinleft-but-chosen {
             border-right: 1px rgb(250, 250, 250) solid;
         }
-
+        
         .pinleft-but p {
             line-height: 45px;
             font-size: 15px;
         }
-
+        
         .picCont {
             background-color: rgb(150, 150, 150);
         }
         /*搜索条*/
-
+        
         .search_bar {
             height: 35px;
             width: 100%;
+            margin-top: 50px;
             z-index: 100;
         }
-
+        
         .search_parent {
             position: fixed;
             z-index: 100;
         }
-
+        
         .search_btn {
             height: 35px;
             width: 35px;
@@ -171,7 +167,7 @@
             cursor: pointer;
             z-index: 101;
         }
-
+        
         .search_text {
             width: 100%;
             height: 35px;
@@ -181,80 +177,73 @@
             z-index: 100;
         }
         /*图表容器*/
-
-        .cavCont {
-            width: 100%;
-            height: 400px;
-            cursor: pointer;
-            position: relative;
-            perspective: 500;
-            -webkit-perspective: 500;
-        }
-
-        .cavCont-front,
-        .cavCont-back {
-            background-color: rgb(150, 150, 150);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #fff;
-            -webkit-perspective: 1000;
-            backface-visibility: hidden;
-            -webkit-transition: all 1.5s;
-            -moz-transition: all 1.5s;
-            -ms-transition: all 1.5s;
-            -o-transition: all 1.5s;
-            box-shadow: rgba(50, 50, 50, 0.2) 0 0 15px;
-            overflow: hidden;
-        }
-
-        .cavCont-back {
-            position: relative;
-            transform: rotateY(-180deg);
-            -webkit-transform: rotateY(-180deg);
-        }
-
+        
         .opRoom {
             height: 300px;
         }
-        /*下部信息框*/
-
-        .baseInfo {
-            height: 35px;
-        }
-
-        .baseInfo span {
-            line-height: 35px;
-            color: #fff;
-        }
-
-        .baseInfo img {
-            height: 35px;
-            width: 35px;
-            float: right;
-        }
         /*词云容器*/
-
+        
         .cloud {
             height: 250px;
             width: 100%;
         }
-
+        
+        .parentRoll {
+            height: 350px;
+            width: 100%;
+        }
+        
+        .baseInfo {
+            height: 45px;
+        }
+        
+        .baseInfo span {
+            line-height: 45px;
+            font-size: 20px;
+            color: #fff;
+        }
+        /*下部信息框*/
+        
         .textDe {
             height: 35px;
-            border-top: 1px dashed #d0d0d0;
+            border-bottom: 1px dashed #d0d0d0;
         }
-
+        
         .textDe span {
             color: #fff;
             line-height: 35px;
         }
+        
+        .RecordContainer {
+            display: -webkit-box;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+            max-height: 500px;
+            padding-bottom: 15px;
+        }
+        
+        .RecordContainer .Record {
+            height: 55px;
+            background-color: #fff;
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        .Record .Upper {
+            height: 30px;
+            line-height: 30px;
+            font-size: 18px;
+        }
+        
+        .Record .Downer {
+            height: 25px;
+            line-height: 25px;
+            font-size: 14px;
+        }
     </style>
     <div class="titlebar">
         <div class="egret-header topbar">
-            <div class="egret-header-title" onclick="turnYourFace()">房间详情</div>
+            <div class="egret-header-title">房间详情</div>
             <div class="egret-img"><img src="../image/cm2_icn_back.png" alt="" onclick="goback()"></div>
         </div>
     </div>
@@ -299,14 +288,7 @@
 
 
     <div class="picCont">
-        <!-- <div class="cavCont">
-            <div class="cavCont-front" id='0'></div>
-            <div class="cavCont-back" id='1'></div>
-        </div> -->
-        <div class="opRoom">
-            <div class="baseInfo"><span id='roomIdcon'></span></div>
-            <div class="cloud" id='cloud'></div>
-        </div>
+        <div class="baseInfo"><span id='roomIdcon'></span></div>
         <div class="textInfo">
             <div class="textDe">
                 <span>消极比例：12%</span>
@@ -314,8 +296,20 @@
             <div class="textDe">
                 <span>近期预警次数：10</span>
             </div>
-            <div class="textDe">
-                <span>近期处理措施：警告</span>
+            <div class="textDe" onclick="openMore()">
+                <span>点击查看详细记录</span>
+            </div>
+        </div>
+        <div class="RecordContainer" id="record">
+            <div id="recordFlag"></div>
+            <div class="Record">
+                <p class="Upper">2019.6.3 3:45</p>
+                <p class="Downer">预警级别:1</p>
+            </div>
+        </div>
+        <div class="opRoom">
+            <div class="cloud" id='cloud'></div>
+            <div class="parentRoll" id='Roll'>
             </div>
         </div>
     </div>
@@ -324,6 +318,7 @@
 <script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="../script/highcharts.js"></script>
 <script type="text/javascript" src="../script/wordcloud.js"></script>
+<script type="text/javascript" src="../script/chart.js"></script>
 <script type="text/javascript" src="../script/api.js"></script>
 <script type="text/javascript">
     var ifFront = 0;
@@ -331,272 +326,234 @@
     localStorage.removeItem('Rid');
     apiready = function() {
         init();
-        changeType(0);
-        getRoomHistory();
     };
-
+    // 页面初始化工作
     init = function() {
-        // createPie();
-        // createChart();
-        wehaveCloud();
-    }
-
-    getRoomHistory = function() {
-        chooseSort(1);
-    }
-
+            $('#roomIdcon').html('房间号' + Rid);
+            wehaveCloud(); //初始化词云
+            chooseSort(1); //初始化记录列表
+            getWordsFreq(); //初始化条形图
+            changeType(0); //隐藏的操作面板默认选定第一个选项卡
+            openMore(); //隐藏详细记录列表
+        }
+        // 打开隐藏的列表
     openleftPanel = function() {
-        $("#fuk").toggle(500);
-    }
-
+            $("#fuk").toggle(500);
+        }
+        // 显示详细的记录列表
+    openMore = function() {
+            $("#record").slideToggle(500);
+        }
+        // 隐藏选项列表的右侧选项卡相应事件
     changeType = function(i) {
-        j = (i + 1) % 2
-        $("#but" + i).addClass("pinleft-but-chosen");
-        $("#but" + j).removeClass("pinleft-but-chosen");
-        $("#panelR" + j).addClass("pinright-hidden");
-        $("#panelR" + i).removeClass("pinright-hidden");
-    }
-
+            j = (i + 1) % 2
+            $("#but" + i).addClass("pinleft-but-chosen");
+            $("#but" + j).removeClass("pinleft-but-chosen");
+            $("#panelR" + j).addClass("pinright-hidden");
+            $("#panelR" + i).removeClass("pinright-hidden");
+        }
+        // 获得用户选择的时间
     chooseTime = function(i) {
-        if (i != 3) {
-            j = (i + 1) % 3;
-            k = (i + 2) % 3;
-            $("#Dbut" + i).addClass("Datebut-choosen");
-            $("#Dbut" + k).removeClass("Datebut-choosen");
-            $("#Dbut" + j).removeClass("Datebut-choosen");
-        }else{
-          
-        }
-    }
+            if (i != 3) {
+                j = (i + 1) % 3;
+                k = (i + 2) % 3;
+                $("#Dbut" + i).addClass("Datebut-choosen");
+                $("#Dbut" + k).removeClass("Datebut-choosen");
+                $("#Dbut" + j).removeClass("Datebut-choosen");
+            } else {
 
+            }
+        }
+        // 根据要求的排序方法获取记录列表信息
     chooseSort = function(i) {
-        var SortWays = ['ascend_time', 'descent_time', 'ascend_level', 'descent_level']
-        j = (i + 1) % 4;
-        k = (i + 2) % 4;
-        l = (i + 3) % 4;
-        $("#Sbut" + i).addClass("Datebut-choosen");
-        $("#Sbut" + k).removeClass("Datebut-choosen");
-        $("#Sbut" + j).removeClass("Datebut-choosen");
-        $("#Sbut" + l).removeClass("Datebut-choosen");
+            openleftPanel();
+            var SortWays = ['ascend_time', 'descent_time', 'ascend_level', 'descent_level']
+            j = (i + 1) % 4;
+            k = (i + 2) % 4;
+            l = (i + 3) % 4;
+            $("#Sbut" + i).addClass("Datebut-choosen");
+            $("#Sbut" + k).removeClass("Datebut-choosen");
+            $("#Sbut" + j).removeClass("Datebut-choosen");
+            $("#Sbut" + l).removeClass("Datebut-choosen");
 
 
-        var token = localStorage.getItem("token");
-        api.ajax({
-            url: 'http://47.98.53.200:5000/danmu/history/',
-            method: 'post',
-            headers: {
-                //'Content-Type': 'application/json;charset=utf-8',
-                'authorization': 'JWT ' + token,
-                // "enctype": "multipart/form-data",
-                // 'Connection': 'keep-alive'
-            },
-            data: {
-                values: {
-                    'roomId': Rid,
-                    'sortBy': SortWays[i]
-                }
-            }
-        }, function(ret, err) {
-            alert(JSON.stringify(ret));
-            //alert(JSON.stringify(err));
-        });
-
-    }
-
-    createPie = function() {
-        var chart;
-        $(function() {
-            $('#0').highcharts({
-                chart: {
-                    borderColor: '#E5E8EB', //图表框颜色
-                    borderWidth: 1, //图表框宽度
-                    backgroundColor: 'rgb(255, 255, 255)', //图表背景色
-                    plotBackgroundColor: '', //绘图区无颜色
-                    plotBorderWidth: 0, //绘图区边框宽度
-                    plotShadow: false, //绘图区阴影效果
-                    spacing: [100, 20, 30, 20] //图表内边距，上右下左
+            var token = localStorage.getItem("token");
+            api.ajax({
+                url: 'http://47.98.53.200:5000/danmu/history/',
+                method: 'post',
+                headers: {
+                    //'Content-Type': 'application/json;charset=utf-8',
+                    'authorization': 'JWT ' + token,
+                    // "enctype": "multipart/form-data",
+                    // 'Connection': 'keep-alive'
                 },
-                colors: [
-                    '#EFE07C', '#89B5EB', '#F8AA9E', '#FFC7B8', '#F18686', '#EFC27C'
-                ], // colors是饼图或者环形图中每一块的颜色
-                credits: {
-                    enabled: false //右下角的版权信息不显示
-                },
-                title: {
-                    floating: true,
-                    text: '弹幕情况', //环形图中心显示文字加图片
-                    useHTML: true, //必须设置true才能加图片
-                },
-                tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
-                }, //浮动的数据提示框
-                plotOptions: {
-                    pie: {
-                        size: 200, //环形图大小控制
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: true,
-                            format: '<b>{point.name}</b>: {point.percentage:.2f} %'
-                        }
+                data: {
+                    values: {
+                        'roomId': Rid,
+                        'sortBy': SortWays[i]
                     }
-                },
-                series: [{
-                    type: 'pie',
-                    innerSize: '70%', // 圆环厚度百分比
-                    name: '占比', //浮动框的文字提示
-                    showInLegend: true, //显示图例
-                    data: [
-                        ['1', 45.0],
-                        ['2', 26.8],
-                        ['3', 6.2],
-                        ['4', 16.2],
-                        ['5', 36.2],
-                    ]
-                }],
-                legend: {
-                    layout: 'horizontal', //图例水平排放，超过宽度后换行
-                    labelFormat: '{name} {percentage:.2f} %',
-                    symbolHeight: 8, //图例小标志高度
-                    symbolWidth: 8,
-                    width: 100, //图例区宽度
-                    align: 'center',
-                    symbolRadius: 0 // 图例形状为方形
-                },
-            }, function(c) {
-                // 环形图圆心
-                var centerY = c.series[0].center[1],
-                    titleHeight = parseInt(c.title.styles.fontSize);
-                c.setTitle({
-                    y: centerY + titleHeight / 2
-                });
-                chart = c;
-            });
-        });
-    }
-
-    createChart = function() {
-        var title = {
-            text: ''
-        };
-        var subtitle = {
-            text: '房间：1564854'
-        };
-        var xAxis = {
-            categories: ['1', '2', '3', '4', '5', '6',
-                '7', '8', '9', '10', '11', '12'
-            ]
-        };
-        var yAxis = {
-            title: {
-                text: '积极度 '
-            }
-        };
-        var plotOptions = {
-            line: {
-                dataLabels: {
-                    enabled: true
-                },
-                enableMouseTracking: false
-            }
-        };
-        var series = [{
-            name: '实际',
-            data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, {
-                y: 25.2,
-                color: "#BF0000"
-            }, {
-                y: 26.6,
-                color: "#BF0000"
-            }, 23.3, 18.3, 13.9, 9.6]
-        }, {
-            name: '预测',
-            data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-        }];
-
-        var credits = {
-            enabled: false //右下角的版权信息不显示
-        };
-
-        var json = {};
-
-        json.title = title;
-        json.subtitle = subtitle;
-        json.xAxis = xAxis;
-        json.yAxis = yAxis;
-        json.series = series;
-        json.plotOptions = plotOptions;
-        json.credits = credits;
-        $('#1').highcharts(json);
-    }
-
-    wehaveCloud = function() {
-        var token = localStorage.getItem("token");
-        var retArr = [];
-        var retJson;
-        api.ajax({
-            url: 'http://47.98.53.200:5000/danmu/wordcloud/',
-            method: 'post',
-            headers: {
-                //'Content-Type': 'application/json;charset=utf-8',
-                'authorization': 'JWT ' + token,
-                // "enctype": "multipart/form-data",
-                // 'Connection': 'keep-alive'
-            },
-            data: {
-                values: {
-                    'roomId': Rid
                 }
-            }
-        }, function(ret, err) {
-            for (var key in ret) {
-                var obj = {
-                    name: key,
-                    weight: ret[key]
-                };
-                retArr.push(obj);
-            }
-            Highcharts.chart('cloud', {
-                series: [{
-                    type: 'wordcloud',
-                    data: retArr,
-                    name: 'Occurrences'
-                }],
-                title: {
-                    text: ''
-                },
-                credits: {
-                    enabled: false //右下角的版权信息不显示
+            }, function(ret, err) {
+                if (ret) {
+                    alert(JSON.stringify(ret));
+                    createRecordList(ret);
+                } else {
+                    alert(JSON.stringify(err));
                 }
             });
-        });
 
-    }
-
-    turnYourFace = function() {
-        if (ifFront == 0) {
-            $("#0").css({
-                "transform": "rotateY(-180deg)",
-                "-webkit-transform": "rotateY(-180deg)"
-            });
-            $("#1").css({
-                "transform": "rotateY(-360deg)",
-                "-webkit-transform": "rotateY(-360deg)"
-            });
-            ifFront = (ifFront + 1) % 2;
-            return;
-        } else {
-            $("#0").css({
-                "transform": "rotateY(0deg)",
-                "-webkit-transform": "rotateY(0deg)"
-            });
-            $("#1").css({
-                "transform": "rotateY(-180deg)",
-                "-webkit-transform": "rotateY(-180deg)"
-            });
-            ifFront = (ifFront + 1) % 2;
-            return;
         }
+        // 创建历史记录列表
+    createRecordList = function(ret) {
+            var insStr = '';
+            for (var i in ret) {
+                insStr += '<div class="Record">' +
+                    '<p class="Upper">' + transTime(ret.results[i].creat_at) + '</p>' +
+                    '<p class="Downer">预警级别:' + ret.results[i].alert_level + '</p>' +
+                    '</div>';
+            }
+            $('div').remove(".Record");
+            $("#flag").after(recordFlag);
+        }
+        // 从后台获取高频词汇
+    getWordsFreq = function() {
+            var token = localStorage.getItem("token");
+            api.ajax({
+                url: 'http://47.98.53.200:5000/danmu/wordfrequency/',
+                method: 'post',
+                headers: {
+                    //'Content-Type': 'application/json;charset=utf-8',
+                    'authorization': 'JWT ' + token,
+                    // "enctype": "multipart/form-data",
+                    // 'Connection': 'keep-alive'
+                },
+                data: {
+                    values: {
+                        'roomId': Rid
+                    }
+                }
+            }, function(ret, err) {
+                if (ret) {
+                    alert(JSON.stringify(ret));
+                    createRoll(ret);
+                } else {
+                    alert(JSON.stringify(err));
+                }
+            });
+        }
+        // 从后台获取信息并创建词云
+    wehaveCloud = function() {
+            var token = localStorage.getItem("token");
+            var retArr = [];
+            var retJson;
+            api.ajax({
+                url: 'http://47.98.53.200:5000/danmu/wordcloud/',
+                method: 'post',
+                headers: {
+                    //'Content-Type': 'application/json;charset=utf-8',
+                    'authorization': 'JWT ' + token,
+                    // "enctype": "multipart/form-data",
+                    // 'Connection': 'keep-alive'
+                },
+                data: {
+                    values: {
+                        'roomId': Rid
+                    }
+                }
+            }, function(ret, err) {
+                for (var key in ret) {
+                    var obj = {
+                        name: key,
+                        weight: ret[key]
+                    };
+                    retArr.push(obj);
+                }
+                Highcharts.chart('cloud', {
+                    series: [{
+                        type: 'wordcloud',
+                        data: retArr,
+                        name: 'Occurrences'
+                    }],
+                    title: {
+                        text: ''
+                    },
+                    credits: {
+                        enabled: false //右下角的版权信息不显示
+                    }
+                });
+            });
+
+        }
+        // 创建条形图
+    createRoll = function(ret) {
+        var positiveCategories = ret.pos_words;
+        var negativeCategories = ret.neg_words;
+        var positiveDatas = beNeg(ret.pos_result);
+        ret.neg_result.push(0);
+        var negativeDatas = ret.neg_result;
+        Highcharts.chart('Roll', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: '高频词汇汇总'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: [{
+                categories: positiveCategories,
+                reversed: false,
+                labels: {
+                    step: 1
+                }
+            }, { // mirror axis on right side
+                opposite: true,
+                reversed: false,
+                categories: negativeCategories,
+                linkedTo: 0,
+                labels: {
+                    step: 1
+                }
+            }],
+            yAxis: {
+                title: {
+                    text: null
+                },
+                labels: {
+                    formatter: function() {
+                        return Math.abs(this.value);
+                    }
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    stacking: 'normal'
+                }
+            },
+
+            tooltip: {
+
+            },
+
+            series: [{
+                name: '积极',
+                data: positiveDatas
+            }, {
+                name: '消极',
+                data: negativeDatas
+            }]
+        });
+    }
+
+    beNeg = function(arr) {
+        var temp = [];
+        for (var i in arr) {
+            temp[i] = 0 - arr[i]
+        };
+        temp.push(-0);
+        return temp;
     }
 
     goback = function() {

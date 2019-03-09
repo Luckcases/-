@@ -134,9 +134,22 @@
             background-attachment: fixed;
         }
 
+        .slide-item-img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide-item-img img {
+            max-width: 100%;
+            max-height: 100%;
+            width: 100%;
+            height: 100%;
+        }
+
         .bottomContent {
+            position: relative;
             height: 25px;
-            margin-top: 125px;
+            margin-top: -25px;
             background: #000;
             opacity: 0.5;
         }
@@ -198,7 +211,7 @@
             <p onclick="Manage(1)" class="pp" id='Sort1'>删除</p>
         </div>
 
-        <!-- 房间信息展示列表项 -->
+        <!-- 上部展示区域 -->
 
         <div class="topContent">
             <div class="cavContainer" id='cavContainer'>
@@ -213,6 +226,49 @@
     <div class="slide-box">
         <div id='flag'></div>
         <div class="slide-item" onclick="changeShow(156235)">
+            <div class="slide-item-img">
+                <img alt="" src="../image/douyu.jpg">
+            </div>
+            <div class="bottomContent">
+                <span>房间号156235<span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="changeShow(156235)">
+            <div class="slide-item-img">
+                <img alt="" src="../image/douyu.jpg">
+            </div>
+            <div class="bottomContent">
+                <span>房间号156235<span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="changeShow(156235)">
+            <div class="slide-item-img">
+                <img alt="" src="../image/douyu.jpg">
+            </div>
+            <div class="bottomContent">
+                <span>房间号156235<span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="changeShow(156235)">
+            <div class="slide-item-img">
+                <img alt="" src="../image/douyu.jpg">
+            </div>
+            <div class="bottomContent">
+                <span>房间号156235<span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="changeShow(156235)">
+            <div class="slide-item-img">
+                <img alt="" src="../image/douyu.jpg">
+            </div>
+            <div class="bottomContent">
+                <span>房间号156235<span>
+          </div>
+        </div>
+        <div class="slide-item" onclick="changeShow(156235)">
+            <div class="slide-item-img">
+                <img alt="" src="../image/douyu.jpg">
+            </div>
             <div class="bottomContent">
                 <span>房间号156235<span>
           </div>
@@ -265,7 +321,7 @@
 
       }, function(ret, err) {
           if (err) {
-              alert(JSON.stringify(err));
+            alert(JSON.stringify(err));
           } else {
             alert(JSON.stringify(ret));
             if (ret.count != 0){
@@ -287,11 +343,40 @@
         if (i == 0){
           openAddPage();
         }else{
+          api.confirm({
+            title: '确认',
+            msg: '确定停止该直播监控吗？',
+            buttons: ['确定', '取消']
+          }, function(ret, err) {
+            if(ret.buttonIndex == 1){
+              api.ajax({ //请求信息
+                  url: 'http://47.98.53.200:5000/danmu/analyse/',
+                  method: 'DELETE',
+                  headers: {
+                      //'Content-Type': 'application/json;charset=utf-8',
+                      'authorization': 'JWT ' + token,
+                      //"enctype": "multipart/form-data",
+                      // 'Connection': 'keep-alive'
+                  },
+                  data: {
+                      body: {
+                          'roomId': Rid
+                  }
+                }
+
+              }, function(ret, err) {
+                  if (err.body) {
+                      alert('处理成功');
+                      location.reload(true);
+                  }
+              });
+            }
+          });
 
         }
     }
 
-    sortBy = function(i) { //打开排序选项框
+    sortBy = function(i) { //打开管理选项框
         $("#SortArea").slideToggle(500);
     }
 
@@ -299,22 +384,17 @@
         var addStr = '';
         changeShow(ret.results[0].id);
         for (var i in ret.results) {
-            addStr +=
-                '<div class="slide-item" id = "' + ret.results[i].id + '" onclick="changeShow(' + ret.results[i].id + ')">'+
-                  '<div class="bottomContent">'+
-                    '<span>房间号' + ret.results[i].id + '<span>'+
+            addStr +=  '<div class="slide-item" id = "' + ret.results[i].id + '" onclick="changeShow(' + ret.results[i].id + ')">'+
+                  '<div class="slide-item-img">'+
+                    '<img alt="" src="' + ret.results[i].img + '">'+
                   '</div>'+
+                  '<div class="bottomContent">'+
+                      '<span>房间号' + ret.results[i].id + '<span>'+
+                '</div>'+
                 '</div>'
         }
         $('div').remove(".slide-item")
         $("#flag").after(addStr);
-        for (var i in ret.results) {
-          if (ret.results[i].img != null){
-            $('#' + ret.results[i].id).css({
-              "background-image": "url('../image/douyu.jpg')"
-            });
-          }
-        }
     }
 
     searchBy = function() { //搜索响应事件
@@ -509,34 +589,6 @@
 
     }
 
-    addInitEvent = function(){
-      window.addEventListener('touchstart', function(event) {
-        var touch = event.targetTouches[0];
-        // 把元素放在手指所在的位置
-        touchStart = touch.pageY;
-        console.log(touchStart);
-    }, false);
-    window.addEventListener('touchmove', function(event) {
-        var touch = event.targetTouches[0];
-        console.log(touch.pageY + 'px');
-        scroll.style.top = scroll.offsetTop + touch.pageY-touchStart + 'px';
-        console.log(scroll.style.top);
-        touchStart = touch.pageY;
-        touchDis = touch.pageY-touchStart;
-    }, false);
-    window.addEventListener('touchend', function(event) {
-        touchStart = 0;
-        var top = scroll.offsetTop;
-        console.log(top);
-        if(top>70)apiready();
-        if(top>0){
-            var time = setInterval(function(){
-                scroll.style.top = scroll.offsetTop -2+'px';
-                if(scroll.offsetTop<=0)clearInterval(time);
-            },1)
-        }
-    }, false);
-  }
     //倒序函数
     Turn = function(arr) {
         var temp = [];

@@ -20,6 +20,7 @@
 
         .search_parent {
             position: fixed;
+            z-index: 101
         }
 
         .search_btn {
@@ -34,7 +35,7 @@
             background-clip: border-box;
             background-attachment: fixed;
             cursor: pointer;
-            z-index: 2;
+            z-index: 102;
         }
 
         .search_text {
@@ -44,7 +45,7 @@
             position: fixed;
             background-color: #f0f0f0;
             border-bottom: 1px solid rgba(200, 200, 200, 0.5);
-            z-index: 1;
+            z-index: 101;
         }
 
         .space {
@@ -52,6 +53,7 @@
         }
 
         .room_info {
+            margin-top: 10px;
             height: 60px;
             background-color: #fff;
             border-bottom: 1px #f0f0f0 solid;
@@ -70,6 +72,7 @@
         .innerLeft img {
             height: 60px;
             width: 60px;
+            z-index: 1;
         }
 
         .innerMid {
@@ -91,49 +94,36 @@
             color: rgb(150, 150, 150);
         }
 
-        .right-btn{
-          float: left;
-          display: inline-block;
-          height: 60px;
-          width: 60px;
+        .room_moreinfo {
+            background: #fff;
         }
 
-        .right-btn img{
-          height: 20px;
-          width: 20px;
-          margin-top: 40px;
+        .room_moreinfo_text {
+            line-height: 25px;
+            padding-left: 15px;
+            border-bottom: 1px #f0f0f0 dashed;
         }
 
-        .room_moreinfo{
-          background: #fff;
+        .moreinfo_level {
+            line-height: 35px;
+            font-size: 16px;
+            padding-left: 5px;
         }
 
-        .room_moreinfo_text{
-          line-height: 25px;
-          padding-left: 15px;
-          border-bottom: 1px #f0f0f0 dashed;
+        .moreinfo_level .level_Low {
+            color: #00FF00;
         }
 
-        .moreinfo_level{
-          line-height: 35px;
-          font-size: 16px;
-          padding-left: 5px;
+        .moreinfo_level .level_Mid {
+            color: #FF8C00;
         }
 
-        .moreinfo_level .level_Low{
-          color: #00FF00;
+        .moreinfo_level .level_High {
+            color: #FF00FF;
         }
 
-        .moreinfo_level .level_Mid{
-          color: #FF8C00;
-        }
-
-        .moreinfo_level .level_High{
-          color: #FF00FF;
-        }
-
-        .moreinfo_level .level_Serious{
-          color: #f00;
+        .moreinfo_level .level_Serious {
+            color: #f00;
         }
     </style>
 </head>
@@ -142,7 +132,7 @@
     <div class="search_bar">
         <form action="" class="search_parent ">
             <input type="button" name="" id="" class="search_btn">
-            <input type="text" id ='sText' class="search_text" placeholder="搜索" onchange="search()">
+            <input type="text" id='sText' class="search_text" placeholder="搜索" onchange="search()">
         </form>
     </div>
     <div class="space" id="flag"></div>
@@ -157,7 +147,9 @@
         </div>
     </div>
     <div class="room_moreinfo">
-        <div><p class="moreinfo_level">建议处理优先级：<span class="level_Serious">极高</span></p></div>
+        <div>
+            <p class="moreinfo_level">建议处理优先级：<span class="level_Serious">极高</span></p>
+        </div>
         <p class='room_moreinfo_text'>近期预警次数：22</p>
     </div>
 
@@ -171,7 +163,9 @@
         </div>
     </div>
     <div class="room_moreinfo">
-        <div><p class="moreinfo_level">建议处理优先级：<span class="level_Low">低</span></p></div>
+        <div>
+            <p class="moreinfo_level">建议处理优先级：<span class="level_Low">低</span></p>
+        </div>
         <p class='room_moreinfo_text'>近期预警次数：22</p>
     </div>
 
@@ -185,7 +179,9 @@
         </div>
     </div>
     <div class="room_moreinfo">
-        <div><p class="moreinfo_level">建议处理优先级：<span class="level_Mid">中</span></p></div>
+        <div>
+            <p class="moreinfo_level">建议处理优先级：<span class="level_Mid">中</span></p>
+        </div>
         <p class='room_moreinfo_text'>近期预警次数：22</p>
     </div>
 
@@ -199,7 +195,9 @@
         </div>
     </div>
     <div class="room_moreinfo">
-        <div><p class="moreinfo_level">建议处理优先级：<span class="level_High">高</span></p></div>
+        <div>
+            <p class="moreinfo_level">建议处理优先级：<span class="level_High">高</span></p>
+        </div>
         <p class='room_moreinfo_text'>近期预警次数：22</p>
     </div>
 </body>
@@ -208,72 +206,72 @@
 <script type="text/javascript" src="../script/jquery-3.3.1.js"></script>
 <script type="text/javascript">
     apiready = function() {
-      var token = localStorage.getItem('token');
-      api.ajax({
-          url: 'http://47.98.53.200:5000/danmu/statistic/',
-          method: 'get',
-          headers: {
-              'Content-Type': 'application/json;charset=utf-8',
-              'authorization': 'JWT ' + token,
-              "enctype": "multipart/form-data",
-              // 'Connection': 'keep-alive'
-          }
-      },function(ret, err){
-          if (ret) {
-              alert( JSON.stringify( ret ) );
-              initEmerHistory(ret);
-          } else {
-              alert( JSON.stringify( err ) );
-          }
-      });
+        var token = localStorage.getItem('token');
+        api.ajax({
+            url: 'http://47.98.53.200:5000/danmu/statistic/',
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'authorization': 'JWT ' + token,
+                "enctype": "multipart/form-data",
+                // 'Connection': 'keep-alive'
+            }
+        }, function(ret, err) {
+            if (ret) {
+              alert(JSON.stringify(ret));
+                initEmerHistory(ret);
+            } else {
+                alert(JSON.stringify(err));
+            }
+        });
     }
 
-    initEmerHistory = function(ret){
-      var insStr = '';
-      for (var i in ret){
-        insStr+='<div class="room_info">'+
-            '<div class="innerLeft">'+
-                '<img src="../image/douyu.jpg">'+
-            '</div>'+
-            '<div class="innerMid" onclick="openHistory()">'+
-                '<span class="firstSpan">房间号'+ ret[i][0] +'</span>'+
-                '<span class="secondSpan">数据由鹰眼提供</span>'+
-            '</div>'+
-        '</div>'
-        if (ret[i][1] < 10){
-          insStr+= '<div class="room_moreinfo">'+
-              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Low">低</span></p></div>'+
-              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
-          '</div>'
-        }else if (ret[i][1] > 10 && ret[i][1] < 20) {
-          insStr+= '<div class="room_moreinfo">'+
-              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Mid">中</span></p></div>'+
-              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
-          '</div>'
-        }else if (ret[i][1] > 20 && ret[i][1] < 50) {
-          insStr+= '<div class="room_moreinfo">'+
-              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_High">较高</span></p></div>'+
-              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
-          '</div>'
-        }else {
-          insStr+= '<div class="room_moreinfo">'+
-              '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Serious">极高</span></p></div>'+
-              '<p class="room_moreinfo_text">近期预警次数：'+ ret[i][1] +'</p>'+
-          '</div>'
+    initEmerHistory = function(ret) {
+        var insStr = '';
+        for (var i in ret) {
+            insStr += '<div class="room_info">' +
+                '<div class="innerLeft">' +
+                '<img src="../image/douyu.jpg">' +
+                '</div>' +
+                '<div class="innerMid" onclick="openHistory(' + ret[i][0] + ')">' +
+                '<p class="firstSpan">房间号' + ret[i][0] + '</p>' +
+                '<p class="secondSpan">数据由鹰眼提供</p>' +
+                '</div>' +
+                '</div>'
+            if (ret[i][1] < 10) {
+                insStr += '<div class="room_moreinfo">' +
+                    '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Low">低</span></p></div>' +
+                    '<p class="room_moreinfo_text">近期预警次数：' + ret[i][1] + '</p>' +
+                    '</div>'
+            } else if (ret[i][1] > 10 && ret[i][1] < 20) {
+                insStr += '<div class="room_moreinfo">' +
+                    '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Mid">中</span></p></div>' +
+                    '<p class="room_moreinfo_text">近期预警次数：' + ret[i][1] + '</p>' +
+                    '</div>'
+            } else if (ret[i][1] > 20 && ret[i][1] < 50) {
+                insStr += '<div class="room_moreinfo">' +
+                    '<div><p class="moreinfo_level">建议处理优先级：<span class="level_High">较高</span></p></div>' +
+                    '<p class="room_moreinfo_text">近期预警次数：' + ret[i][1] + '</p>' +
+                    '</div>'
+            } else {
+                insStr += '<div class="room_moreinfo">' +
+                    '<div><p class="moreinfo_level">建议处理优先级：<span class="level_Serious">极高</span></p></div>' +
+                    '<p class="room_moreinfo_text">近期预警次数：' + ret[i][1] + '</p>' +
+                    '</div>'
+            }
+
         }
-
-      }
+        $('div').remove('.room_info');
+        $('div').remove('.room_moreinfo');
+        $('#flag').after(insStr);
     }
 
-    search = function(){
+    search = function() {
 
     }
 
-    showMore = function(){
-      $('div.room_moreinfo').slideToggle(500);
-    }
-
-    openHistory = function() {
+    openHistory = function(id) {
+        localStorage.setItem('Rid',id);
         api.openWin({
             name: 'detailHistory',
             url: 'detailHistory.html',
