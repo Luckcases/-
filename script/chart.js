@@ -245,3 +245,8 @@ transTime = function(time) {
     time = str[0];
     return time;
 }
+
+transToPersent = function(dot){
+   var percent = parseInt(dot*100) + "%"
+   return percent;
+}

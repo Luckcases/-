@@ -12,7 +12,7 @@
             min-height: 100%;
         }
         /*头部*/
-        
+
         .titlebar {
             position: fixed;
             background-color: inherit;
@@ -21,17 +21,17 @@
             margin-top: -50px;
             z-index: 101;
         }
-        
+
         .egret-img {
             position: fixed;
         }
-        
+
         .egret-img img {
             height: 30px;
             padding: 10px;
             vertical-align: top;
         }
-        
+
         .egret-header-text {
             position: fixed;
             line-height: 50px;
@@ -39,7 +39,7 @@
             font-size: 16px;
             padding: 0 10px;
         }
-        
+
         .egret-header-title {
             position: fixed;
             position: absolute;
@@ -50,7 +50,7 @@
             font-size: 20px;
         }
         /*左侧隐藏的筛选页面*/
-        
+
         .leftPanel {
             /*padding-top:;*/
             height: 100%;
@@ -60,7 +60,7 @@
             z-index: 99;
             display: none;
         }
-        
+
         .leftPanel .pinleft {
             display: inline-block;
             float: left;
@@ -68,18 +68,18 @@
             width: 25%;
             border-right: 1px rgba(200, 200, 200, 0.5) solid;
         }
-        
+
         .leftPanel .pinright {
             display: inline-block;
             float: left;
             height: 100%;
             width: 74%;
         }
-        
+
         .leftPanel .pinright-hidden {
             display: none;
         }
-        
+
         .pinright .Datebut {
             width: 90px;
             height: 25px;
@@ -89,15 +89,15 @@
             margin-top: 10px;
             margin-left: 5px;
         }
-        
+
         .Datebut span {
             line-height: 25px;
         }
-        
+
         .Datebut-choosen {
             background-color: rgb(180, 180, 180);
         }
-        
+
         .pinright .DateArea {
             width: 100%;
             height: 150px;
@@ -106,52 +106,52 @@
             padding-left: 10px;
             border-top: 1px solid #dddddd;
         }
-        
+
         .DateArea input {
             height: 25px;
             font-size: 18px;
             border: 1px solid #dddddd;
             border-radius: 8px;
         }
-        
+
         .DateArea p {
             height: 25px;
             line-height: 25px;
         }
-        
+
         .pinleft-but {
             width: 100%;
             height: 45px;
             text-align: center;
             border-bottom: 1px rgba(200, 200, 200, 0.5) solid;
         }
-        
+
         .pinleft-but-chosen {
             border-right: 1px rgb(250, 250, 250) solid;
         }
-        
+
         .pinleft-but p {
             line-height: 45px;
             font-size: 15px;
         }
-        
+
         .picCont {
             background-color: rgb(150, 150, 150);
         }
         /*搜索条*/
-        
+
         .search_bar {
             height: 35px;
             width: 100%;
             margin-top: 50px;
             z-index: 100;
         }
-        
+
         .search_parent {
             position: fixed;
             z-index: 100;
         }
-        
+
         .search_btn {
             height: 35px;
             width: 35px;
@@ -167,7 +167,7 @@
             cursor: pointer;
             z-index: 101;
         }
-        
+
         .search_text {
             width: 100%;
             height: 35px;
@@ -177,43 +177,43 @@
             z-index: 100;
         }
         /*图表容器*/
-        
+
         .opRoom {
             height: 300px;
         }
         /*词云容器*/
-        
+
         .cloud {
             height: 250px;
             width: 100%;
         }
-        
+
         .parentRoll {
             height: 350px;
             width: 100%;
         }
-        
+
         .baseInfo {
             height: 45px;
         }
-        
+
         .baseInfo span {
             line-height: 45px;
             font-size: 20px;
             color: #fff;
         }
         /*下部信息框*/
-        
+
         .textDe {
             height: 35px;
             border-bottom: 1px dashed #d0d0d0;
         }
-        
+
         .textDe span {
             color: #fff;
             line-height: 35px;
         }
-        
+
         .RecordContainer {
             display: -webkit-box;
             overflow-y: scroll;
@@ -221,20 +221,20 @@
             max-height: 500px;
             padding-bottom: 15px;
         }
-        
+
         .RecordContainer .Record {
             height: 55px;
             background-color: #fff;
             margin-top: 15px;
             width: 100%;
         }
-        
+
         .Record .Upper {
             height: 30px;
             line-height: 30px;
             font-size: 18px;
         }
-        
+
         .Record .Downer {
             height: 25px;
             line-height: 25px;
@@ -329,22 +329,23 @@
     };
     // 页面初始化工作
     init = function() {
-            $('#roomIdcon').html('房间号' + Rid);
+            $('#roomIdcon').html('房间号:' + Rid);
             wehaveCloud(); //初始化词云
             chooseSort(1); //初始化记录列表
             getWordsFreq(); //初始化条形图
             changeType(0); //隐藏的操作面板默认选定第一个选项卡
             openMore(); //隐藏详细记录列表
         }
-        // 打开隐藏的列表
+    // 打开隐藏的列表
     openleftPanel = function() {
             $("#fuk").toggle(500);
         }
         // 显示详细的记录列表
+    // 隐藏选项列表的右侧选项卡相应事件
     openMore = function() {
             $("#record").slideToggle(500);
         }
-        // 隐藏选项列表的右侧选项卡相应事件
+    //右侧选项卡卡片选择
     changeType = function(i) {
             j = (i + 1) % 2
             $("#but" + i).addClass("pinleft-but-chosen");
@@ -353,6 +354,7 @@
             $("#panelR" + i).removeClass("pinright-hidden");
         }
         // 获得用户选择的时间
+    //右侧选项卡时间选择
     chooseTime = function(i) {
             if (i != 3) {
                 j = (i + 1) % 3;
@@ -365,6 +367,7 @@
             }
         }
         // 根据要求的排序方法获取记录列表信息
+    //右侧选项卡排序方式选择
     chooseSort = function(i) {
             openleftPanel();
             var SortWays = ['ascend_time', 'descent_time', 'ascend_level', 'descent_level']
@@ -404,6 +407,7 @@
 
         }
         // 创建历史记录列表
+    //创建记录列表
     createRecordList = function(ret) {
             var insStr = '';
             for (var i in ret) {
@@ -413,9 +417,9 @@
                     '</div>';
             }
             $('div').remove(".Record");
-            $("#flag").after(recordFlag);
+            $("#recordFlag").after(insStr);
         }
-        // 从后台获取高频词汇
+    // 从后台获取高频词汇
     getWordsFreq = function() {
             var token = localStorage.getItem("token");
             api.ajax({
@@ -434,14 +438,13 @@
                 }
             }, function(ret, err) {
                 if (ret) {
-                    alert(JSON.stringify(ret));
                     createRoll(ret);
                 } else {
                     alert(JSON.stringify(err));
                 }
             });
         }
-        // 从后台获取信息并创建词云
+    // 从后台获取信息并创建词云
     wehaveCloud = function() {
             var token = localStorage.getItem("token");
             var retArr = [];
@@ -485,6 +488,7 @@
 
         }
         // 创建条形图
+    // 创建柱状图
     createRoll = function(ret) {
         var positiveCategories = ret.pos_words;
         var negativeCategories = ret.neg_words;
